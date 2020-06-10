@@ -936,7 +936,8 @@ let s_cnt=0;
 	 let rb='';
 	 let rt='';
 for(let i = 0; i<og_f.length; i++){
- if(((og_f[i].charCodeAt(0)==32)||(og_f[i].charCodeAt(0)==160))||(i==og_f.length-1)){
+	if(((og_f[i].charCodeAt(0)==32)||(og_f[i].charCodeAt(0)==160))||(i==og_f.length-1)||(og_f[i]=="\n")){
+	 ruby=(og_f[i]=="\n")?ruby+'<br>':ruby;
 	 ruby=(s_cnt>0)?ruby+'<ruby>':ruby;
 	rb='';
 	rt='';
@@ -946,7 +947,7 @@ for(let i = 0; i<og_f.length; i++){
 	 }
 	 s_cnt=i+1;
 	 ruby+='<rb>'+rb+'</rb><rt>'+rt+'</rt></ruby> ';	
- } 
+	}
 }
 
 
