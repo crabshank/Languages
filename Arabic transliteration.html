@@ -844,9 +844,11 @@ for(let j = 0; j<rv.length; j++) {
 				}
 		}
 		 rv=[...l_ar_scr[0]].reverse();
+		 spr_ar.push(String.fromCharCode(10));
 		  for(let j = 0; j<rv.length; j++) {
 				spr_ar.push(rv[j]);
 				}
+				 
 	
 }
  
@@ -858,13 +860,12 @@ let og_f=[];
 
 for(let i = 0; i<spr_ar.length; i++){
 	e_out='';
-	var a=spr_ar[i].charCodeAt(0);
 	og.push(spr_ar[i]);
-
-let c_out=find_tl(a);
 if((spr_ar[i].charCodeAt(0)==13)||(spr_ar[i].charCodeAt(0)==10)){
 e_out=String.fromCharCode(10);
 }else{
+	var a=spr_ar[i].charCodeAt(0);
+    let c_out=find_tl(a);
 	let b=(i+1<spr_ar.length)?spr_ar[i+1].charCodeAt(0):'';
 	let c=(i+2<spr_ar.length)?spr_ar[i+2].charCodeAt(0):'';
 	let d=(i+3<spr_ar.length)?spr_ar[i+3].charCodeAt(0):'';
@@ -954,10 +955,10 @@ var ruby='';
 		let rtt='';
 		if (sp_rt.length>1){
 			ruby+='<ruby>';
-		for(let j = 0; j<sp_rt.length-1; j++){
+		for(let j = 0; j<sp_rt.length; j++){
 			rtt+=sp_rt[j];
 		}
-		for(let j = 0; j<sp_rb.length-1; j++){
+		for(let j = 0; j<sp_rb.length; j++){
 			rbt+=sp_rb[j];
 		}
 		ruby+='<rb>'+rbt+'</rb><rt>'+rtt+'</rt></ruby>';
