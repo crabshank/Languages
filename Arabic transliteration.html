@@ -884,13 +884,13 @@ e_out='\n';
 	}else{
 		
 		if(check_arr(a,shadda)==true){
-			if(i>0){
+			if(i<spr_ar.length-1){
 			var l_c='';
-				for (j=i-1;j>=0;j--){
+				for (j=i+1;j<spr_ar.length;j++){
 					let cr=spr_ar[j].charCodeAt(0);
 					if(check_arr(cr,vwl)==false){
 						e_out=find_tl(cr);
-						j=0;
+						j=spr_ar.length-1;
 					}
 				}
 			}	
