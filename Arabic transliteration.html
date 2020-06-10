@@ -12,7 +12,7 @@ font-size: 254%;
 min-width: 50%;
 min-height: -webkit-fill-available;
 max-width: 50%;
-zoom: 66%;
+zoom: 68%;
 }
 textarea{
 direction:rtl;
@@ -25,6 +25,10 @@ min-width: 50%;
 min-height: -webkit-fill-available;
 max-width: 50%;
 -webkit-user-modify: read-write-plaintext-only;
+}
+ruby > rt {
+font-family: -webkit-pictograph;
+zoom: 234%;
 }
 h1{
 text-align: center;
@@ -638,7 +642,7 @@ var trlr=[[1536,'#'],
 [65020,'riyāl'],
 [65021,'bi-smi llāh ar-raḥmān ar-raḥīm'],
 [65136,'an'],
-[65137,'an'],
+//[65137,'an'],
 [65138,'un'],
 [65140,'in'],
 [65152,"'"],
@@ -807,7 +811,9 @@ asc.onchange= function() {transliterate()};
  
  function transliterate() {
 let ar_scr=asc.value;
-let l_ar_scr=ar_scr.split('\n');
+let l_ar_scr_1=ar_scr.split('ﹱ').join('ً');
+let l_ar_scr_2=l_ar_scr_1.split('ـ').join('');
+let l_ar_scr=l_ar_scr_2.split('\n');
 let spr_ar=[];
  let rv=[];
 for (let i=l_ar_scr.length-1; i>0;i--){
