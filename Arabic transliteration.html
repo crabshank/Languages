@@ -15,7 +15,7 @@ max-width: 50%;
 zoom: 68%;
 }
 textarea{
-//direction: rtl; 
+direction: rtl; 
 text-align: right;
 font-family: -webkit-pictograph;
 font-size: 551%;
@@ -820,6 +820,8 @@ asc.onchange= function() {transliterate()};
 dct.onclick= function() {devowel()};
  
  function transliterate() {
+en_HTML='';
+en_dct_HTML='';
 let ar_scr=asc.value;
 let l_ar_scr_1=ar_scr.split('ﹱ').join('ً');
 let l_ar_scr_2=l_ar_scr_1.split('ـ').join('');
