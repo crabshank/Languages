@@ -6,7 +6,7 @@ div#en{
 direction:ltr;
 position: absolute;
 margin-left: 50%;
-top: 7%;		
+top: 11%;		
 text-align: left;
 font-size: 254%;
 min-width: 50%;
@@ -15,20 +15,25 @@ max-width: 50%;
 zoom: 68%;
 }
 textarea{
-direction:rtl;
+//direction: rtl; 
 text-align: right;
 font-family: -webkit-pictograph;
-font-size: 250%;
+font-size: 551%;
 box-shadow: 0 0 0px 1px;
 border-width: 0px;
-min-width: 50%;
-min-height: -webkit-fill-available;
+min-width: -webkit-fill-available;
+min-height: 200%;
 max-width: 50%;
 -webkit-user-modify: read-write-plaintext-only;
+transform: scaleX(0.5) scaleY(0.5) translateX(-50%) translateY(-50%);
 }
 ruby > rt {
 font-family: -webkit-pictograph;
 zoom: 234%;
+}
+button#dict {
+position: absolute;
+left: 50.35%;
 }
 h1{
 text-align: center;
@@ -41,8 +46,12 @@ text-align: center;
 </style>
 <h1>Arabic transliteration page</h1>
 <textarea id="og"></textarea>
+<button id="dict">Dictionary form</button>
 <div id="en"></div>
 <script>
+
+var en_HTML='';
+var en_dct_HTML='';
 
 var vwl=[378,
 379,
@@ -782,7 +791,7 @@ var shadda= [1617,65148,65149];
 
 var asc=document.getElementById('og');
 var esc=document.getElementById('en');
-
+var dct=document.getElementById('dict');
 
 function find_tl(code){
 let out='';
@@ -808,6 +817,7 @@ return out;
 
 asc.oninput= function() {transliterate()};
 asc.onchange= function() {transliterate()};
+dct.onclick= function() {devowel()};
  
  function transliterate() {
 let ar_scr=asc.value;
@@ -941,9 +951,28 @@ for(let i = 0; i<og_f.length; i++){
 
 //esc.innerText=e_out_f.join('');
 esc.innerHTML=ruby;
+en_HTML=ruby;
 
 }
 
+ function devowel() {
+	 if (dct.innerText=="Dictionary form"){
+		 if (en_dct_HTML==""){
+			 for(let i = 0; i<vwl.length; i++){
+				 esc.innerHTML=esc.innerHTML.split(String.fromCharCode(vwl[i])).join('');
+			 }
+			 en_dct_HTML=esc.innerHTML;
+		 }else{
+			esc.innerHTML=en_dct_HTML;
+		 }
+		 
+		 dct.innerText="Full form";
+	 }else{
+		esc.innerHTML=en_HTML;
+		dct.innerText="Dictionary form";
+	 }
+	 
+ }
  
 </script>
 </body>
