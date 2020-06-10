@@ -828,29 +828,28 @@ let l_ar_scr_2=l_ar_scr_1.split('ـ').join('');
 let l_ar_scr=l_ar_scr_2.split(String.fromCharCode(10));
 let spr_ar=[];
  let rv=[];
-
-let lng=l_ar_scr.length;
- rv=[...l_ar_scr[lng-1]].reverse()
+ let lng=l_ar_scr.length;
+ 
+ if (lng<=1){
+	  rv=[...l_ar_scr[0]].reverse();
 for(let j = 0; j<rv.length; j++) {
   spr_ar.push(rv[j]);
 }
-
-if(lng>2){
-	for (let i=lng-2; i>0;i--){
+}else{
+		for (let i=lng-1; i>0;i--){
 		  rv=[...l_ar_scr[i]].reverse();
-		   spr_ar.push(String.fromCharCode(10));
-				for(let j = 0; j<rv.length; j++) {
+		  spr_ar.push(String.fromCharCode(10));
+		  		for(let j = 0; j<rv.length; j++) {
 				spr_ar.push(rv[j]);
 				}
-	}
+		}
+		 rv=[...l_ar_scr[0]].reverse();
+		  for(let j = 0; j<rv.length; j++) {
+				spr_ar.push(rv[j]);
+				}
+	
 }
-
-	  rv=[...l_ar_scr[0]].reverse();
-	   spr_ar.push(String.fromCharCode(10));
-for(let j = 0; j<rv.length; j++) {
-  spr_ar.push(rv[j]);
-}
-
+ 
 let e_out='';
 let e_out_f=[];
 let e_out_s=[];
@@ -959,8 +958,8 @@ var ruby='';
 		let sp_rb=[...rb[i]];
 		let rbt='';
 		let rtt='';
-		ruby+='<ruby>';
 		if (sp_rt.length>1){
+			ruby+='<ruby>';
 		for(let j = 0; j<sp_rt.length-1; j++){
 			rtt+=sp_rt[j];
 		}
