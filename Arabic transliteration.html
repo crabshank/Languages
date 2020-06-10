@@ -825,20 +825,29 @@ en_dct_HTML='';
 let ar_scr=asc.value;
 let l_ar_scr_1=ar_scr.split('ﹱ').join('ً');
 let l_ar_scr_2=l_ar_scr_1.split('ـ').join('');
-let l_ar_scr=l_ar_scr_2.split('\n');
+let l_ar_scr=l_ar_scr_2.split(String.fromCharCode(10));
 let spr_ar=[];
  let rv=[];
-for (let i=l_ar_scr.length-1; i>0;i--){
-	  rv=[...l_ar_scr[i]].reverse();
-	   spr_ar.push('\n')
-		 for(var j = 0; j<rv.length; j++) {
+
+let lng=l_ar_scr.length;
+ rv=[...l_ar_scr[lng-1]].reverse()
+for(let j = 0; j<rv.length; j++) {
   spr_ar.push(rv[j]);
 }
 
+if(lng>2){
+	for (let i=lng-2; i>0;i--){
+		  rv=[...l_ar_scr[i]].reverse();
+		   spr_ar.push(String.fromCharCode(10));
+				for(let j = 0; j<rv.length; j++) {
+				spr_ar.push(rv[j]);
+				}
+	}
 }
 
 	  rv=[...l_ar_scr[0]].reverse();
-for(var j = 0; j<rv.length; j++) {
+	   spr_ar.push(String.fromCharCode(10));
+for(let j = 0; j<rv.length; j++) {
   spr_ar.push(rv[j]);
 }
 
@@ -854,8 +863,8 @@ for(let i = 0; i<spr_ar.length; i++){
 	og.push(spr_ar[i]);
 
 let c_out=find_tl(a);
-if(spr_ar[i]=='\n'){
-e_out='\n';
+if((spr_ar[i].charCodeAt(0)==13)||(spr_ar[i].charCodeAt(0)==10)){
+e_out=String.fromCharCode(10);
 }else{
 	let b=(i+1<spr_ar.length)?spr_ar[i+1].charCodeAt(0):'';
 	let c=(i+2<spr_ar.length)?spr_ar[i+2].charCodeAt(0):'';
@@ -931,24 +940,39 @@ for(let i = 0; i<e_out_f1.length; i++){
 e_out_f.push(e_out_f1[i].reverse());
 }
 
-let ruby='<ruby>';
-let s_cnt=0;
-	 let rb='';
-	 let rt='';
+
+
+var s_cnt=0;
+	 var rb=[];
+	 var rt=[];
 for(let i = 0; i<og_f.length; i++){
-	if(((og_f[i].charCodeAt(0)==32)||(og_f[i].charCodeAt(0)==160))||(i==og_f.length-1)||(og_f[i]=="\n")){
-	 ruby=(s_cnt>0)?ruby+'<ruby>':ruby;
-	rb='';
-	rt='';
-	 for(let j = s_cnt; j<=i; j++){
-	 rb+=e_out_f[j];
-	 rt+=og_f[j];
-	 }
-	 s_cnt=i+1;
-	 ruby+='<rb>'+rb+'</rb><rt>'+rt+'</rt></ruby> ';
-	 ruby=(og_f[i]=="\n")?ruby+'<br>':ruby;
-	}
+		if (typeof rb[s_cnt]=="undefined"){rb[s_cnt]='';}
+	if (typeof rt[s_cnt]=="undefined"){rt[s_cnt]='';}
+	rt[s_cnt]+=og_f[i];
+	rb[s_cnt]+=e_out_f[i];
+	s_cnt=(((og_f[i].charCodeAt(0)==32)||(og_f[i].charCodeAt(0)==160))||((og_f[i].charCodeAt(0)==13)||(og_f[i].charCodeAt(0)==10)))?s_cnt+1:s_cnt;
 }
+
+var ruby='';
+	for(let i = 0; i<rt.length; i++){
+		let sp_rt=[...rt[i]];
+		let sp_rb=[...rb[i]];
+		let rbt='';
+		let rtt='';
+		ruby+='<ruby>';
+		if (sp_rt.length>1){
+		for(let j = 0; j<sp_rt.length-1; j++){
+			rtt+=sp_rt[j];
+		}
+		for(let j = 0; j<sp_rb.length-1; j++){
+			rbt+=sp_rb[j];
+		}
+		ruby+='<rb>'+rbt+'</rb><rt>'+rtt+'</rt></ruby>';
+		}
+		ruby=((sp_rt[sp_rt.length-1].charCodeAt(0)==32)||(sp_rt[sp_rt.length-1].charCodeAt(0)==160))?ruby+' ':ruby;
+		ruby=((sp_rt[sp_rt.length-1].charCodeAt(0)==13)||(sp_rt[sp_rt.length-1].charCodeAt(0)==10))?ruby+'<br>':ruby;
+	}
+
 
 
 
