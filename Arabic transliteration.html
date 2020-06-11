@@ -970,7 +970,7 @@ var ruby='';
 		ruby+='<rb>'+rbt+'</rb><rt>'+rtt+'</rt></ruby>';
 		ruby=((sp_rt[sp_rt.length-1].charCodeAt(0)==32)||(sp_rt[sp_rt.length-1].charCodeAt(0)==160))?ruby+' ':ruby;
 		ruby=((sp_rt[sp_rt.length-1].charCodeAt(0)==13)||(sp_rt[sp_rt.length-1].charCodeAt(0)==10))?ruby+'<br>':ruby;
-		}else{
+		}else if(sp_rt.length==1){
 			if ((sp_rt[sp_rt.length-1].charCodeAt(0)==32)||(sp_rt[sp_rt.length-1].charCodeAt(0)==160)){
 				ruby+=' ';
 			}
