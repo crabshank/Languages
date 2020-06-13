@@ -831,7 +831,8 @@ dct.innerText="Dictionary form";
 let ar_scr=asc.value;
 let l_ar_scr_1=ar_scr.split('ﹱ').join('ً');
 let l_ar_scr_2=l_ar_scr_1.split('ـ').join('');
-let l_ar_scr=l_ar_scr_2.split(String.fromCharCode(10));
+let l_ar_scr_3=l_ar_scr_2.split(String.fromCharCode(8205)).join('');
+let l_ar_scr=l_ar_scr_3.split(String.fromCharCode(10));
 let spr_ar=[];
  let rv=[];
  let lng=l_ar_scr.length;
@@ -982,10 +983,6 @@ var ruby='';
 			}
 		}
 	}
-
-
-
-
 
 //esc.innerText=e_out_f.join('');
 esc.innerHTML=ruby;
