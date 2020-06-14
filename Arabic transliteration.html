@@ -73,7 +73,6 @@ var vwl=[378,
 1619,
 1620,
 1621,
-1648,
 1761,
 1764,
 1770,
@@ -994,6 +993,7 @@ en_HTML=ruby;
  function devowel() {
 	 if (dct.innerText=="Dictionary form"){
 		 if (en_dct_HTML==""){
+esc.innerHTML=esc.innerHTML.split(String.fromCharCode(1648)).join('');
 			 for(let i = 0; i<vwl.length; i++){
 				 esc.innerHTML=esc.innerHTML.split(String.fromCharCode(vwl[i])).join('');
 			 }
