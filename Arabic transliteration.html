@@ -31,10 +31,21 @@ max-width: 50%;
 -moz-user-modify: read-write;
 transform: scaleX(0.5) scaleY(0.5) translateX(-50%) translateY(-50%);
 }
+ruby > hr{
+display: -webkit-box;
+unicode-bidi: unset;
+margin-block-start: 2.84ch;
+margin-block-end: 0;
+margin-inline-start: unset;
+margin-inline-end: unset;
+overflow: overlay;
+border-style: none;
+border-width: 0;
+height: 0.45ch;
+}
 ruby > rt{
 font-family: -webkit-pictograph;
 font-size: 126%;
-transform: translateY(0.42ch);
 }
 button#dict {
 background-color: buttonface;
@@ -972,7 +983,7 @@ var ruby='';
 		for(let j = 0; j<sp_rb.length; j++){
 			rbt+=sp_rb[j];
 		}
-		ruby+='<rb>'+rbt+'</rb><rt>'+rtt+'</rt></ruby>';
+		ruby+='<hr><rb>'+rbt+'</rb><rt>'+rtt+'</rt></ruby>';
 		ruby=((sp_rt[sp_rt.length-1].charCodeAt(0)==32)||(sp_rt[sp_rt.length-1].charCodeAt(0)==160))?ruby+' ':ruby;
 		ruby=((sp_rt[sp_rt.length-1].charCodeAt(0)==13)||(sp_rt[sp_rt.length-1].charCodeAt(0)==10))?ruby+'<br>':ruby;
 		}else if(sp_rt.length==1){
@@ -982,7 +993,7 @@ var ruby='';
 				else if((sp_rt[sp_rt.length-1].charCodeAt(0)==13)||(sp_rt[sp_rt.length-1].charCodeAt(0)==10)){
 				ruby+='<br>';
 			}else{
-				ruby+='<ruby><rb>'+sp_rb[0]+'</rb><rt>'+sp_rt[0]+'</rt></ruby>';
+				ruby+='<ruby><hr><rb>'+sp_rb[0]+'</rb><rt>'+sp_rt[0]+'</rt></ruby>';
 			}
 		}
 	}
