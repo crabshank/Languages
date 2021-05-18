@@ -960,7 +960,7 @@ for(let i = 0; i<og_out_s.length; i++){
 }
 
 var ruby='';
-//rb=[...rb[0]].reverse().join('')
+
 	for(let i = 0; i<rt.length; i++){
 		let sp_rt=[...rt[i]];
 		let sp_rb=[...rb[i]];
@@ -980,7 +980,7 @@ var ruby='';
 				else if((sp_rt[sp_rt.length-1].charCodeAt(0)==13)||(sp_rt[sp_rt.length-1].charCodeAt(0)==10)){
 				ruby+='<br>';
 			}else{
-				ruby+='<ruby><hr><rb>'+sp_rb.join('')+'</rb><rt>'+sp_rt.join('')+'</rt></ruby>';
+				ruby+='<ruby><hr><rb>'+sp_rb.join('')+'</rb><rt>'+sp_rt.join('')	+'</rt></ruby>';
 			}
 		}
 	}
