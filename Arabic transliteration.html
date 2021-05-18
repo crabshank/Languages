@@ -986,7 +986,8 @@ for(let i = 0; i<og_out_s.length; i++){
 	if (typeof rt[s_cnt]=="undefined"){rt[s_cnt]='';}
 		if (typeof og_out_s[i]!=="undefined"){rt[s_cnt]+=og_out_s[i]};
 		if (typeof e_out_s[i]!=="undefined"){rb[s_cnt]+=e_out_s[i]};
-	s_cnt=(((og_out_s[i].charCodeAt(0)==32)||(og_out_s[i].charCodeAt(0)==160))||((og_out_s[i].charCodeAt(0)==13)||(og_out_s[i].charCodeAt(0)==10)))?s_cnt+1:s_cnt;
+		let last_ltr=og_out_s[i].charCodeAt(Math.max(og_out_s[i].length-1,0));
+	s_cnt=(((last_ltr==32)||(last_ltr==160))||((last_ltr==13)||(last_ltr==10)))?s_cnt+1:s_cnt;
 }
 
 var ruby='';
@@ -996,18 +997,20 @@ var ruby='';
 		let sp_rb=[...rb[i]];
 		let rbt='';
 		let rtt='';
+		let last_ltr=sp_rt[Math.max(0,sp_rt.length-1)].charCodeAt(Math.max(og_out_s[i].length-1,0))
 		if (sp_rt.length>1){
 			ruby+='<ruby>';
 			rtt=sp_rt.join('');
 			rbt=sp_rb.join('');
 		ruby+='<hr><rb>'+rbt+'</rb><rt>'+rtt+'</rt></ruby>';
-		ruby=((sp_rt[sp_rt.length-1].charCodeAt(0)==32)||(sp_rt[sp_rt.length-1].charCodeAt(0)==160))?ruby+' ':ruby;
-		ruby=((sp_rt[sp_rt.length-1].charCodeAt(0)==13)||(sp_rt[sp_rt.length-1].charCodeAt(0)==10))?ruby+'<br>':ruby;
+		
+		ruby=((last_ltr==32)||(last_ltr==160))?ruby+' ':ruby;
+		ruby=((last_ltr==13)||(last_ltr==10))?ruby+'<br>':ruby;
 		}else if(sp_rt.length==1){
-			if ((sp_rt[sp_rt.length-1].charCodeAt(0)==32)||(sp_rt[sp_rt.length-1].charCodeAt(0)==160)){
+			if ((last_ltr==32)||(last_ltr==160)){
 				ruby+=' ';
 			}
-				else if((sp_rt[sp_rt.length-1].charCodeAt(0)==13)||(sp_rt[sp_rt.length-1].charCodeAt(0)==10)){
+				else if((last_ltr==13)||(last_ltr==10)){
 				ruby+='<br>';
 			}else{
 				ruby+='<ruby><hr><rb>'+sp_rb.join('')+'</rb><rt>'+sp_rt.join('')	+'</rt></ruby>';
