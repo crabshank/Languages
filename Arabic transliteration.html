@@ -968,12 +968,8 @@ var ruby='';
 		let rtt='';
 		if (sp_rt.length>1){
 			ruby+='<ruby>';
-		for(let j = 0; j<sp_rt.length; j++){
-			rtt+=sp_rt[j];
-		}
-		for(let j = 0; j<sp_rb.length; j++){
-			rbt+=sp_rb[j];
-		}
+			rtt=sp_rt.join('');
+			rbt=sp_rb.join('');
 		ruby+='<hr><rb>'+rbt+'</rb><rt>'+rtt+'</rt></ruby>';
 		ruby=((sp_rt[sp_rt.length-1].charCodeAt(0)==32)||(sp_rt[sp_rt.length-1].charCodeAt(0)==160))?ruby+' ':ruby;
 		ruby=((sp_rt[sp_rt.length-1].charCodeAt(0)==13)||(sp_rt[sp_rt.length-1].charCodeAt(0)==10))?ruby+'<br>':ruby;
@@ -984,7 +980,7 @@ var ruby='';
 				else if((sp_rt[sp_rt.length-1].charCodeAt(0)==13)||(sp_rt[sp_rt.length-1].charCodeAt(0)==10)){
 				ruby+='<br>';
 			}else{
-				ruby+='<ruby><hr><rb>'+sp_rb.join('')+'</rb><rt>'+sp_rt[0]+'</rt></ruby>';
+				ruby+='<ruby><hr><rb>'+sp_rb.join('')+'</rb><rt>'+sp_rt.join('')+'</rt></ruby>';
 			}
 		}
 	}
