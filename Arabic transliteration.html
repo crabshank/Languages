@@ -868,11 +868,14 @@ for(let j = 0; j<rv.length; j++) {
 let e_out='';
 let e_out_f=[];
 let e_out_s=[];
-let og=[...spr_ar].reverse();
+let og=[];
 let og_f=[];
-	
-for(let i = spr_ar.length-1; i>=0; i--){
+let og_cnt=spr_ar.length-1;
+let i = spr_ar.length-1;
+while(i>=0){
 	e_out='';
+
+
 if((spr_ar[i].charCodeAt(0)==13)||(spr_ar[i].charCodeAt(0)==10)){
 e_out=String.fromCharCode(10);
 }else{
@@ -952,7 +955,26 @@ e_out=c_out;
 }
 }
 e_out_s.push([e_out]);
+
+//i: 49 ->  47 (now)
+//og: 49 -> 49
+//normally: push 49
+//will now push: 47
+
+//so push: 49,48,47
+
+let push_this='';
+while (og_cnt>=i && og_cnt>=0){
+push_this+=spr_ar[og_cnt];
+og_cnt--;
 }
+og_cnt=i;
+og.push(push_this);
+
+og_cnt--;
+i--;
+}
+
 
 let og_out_s=[...og];
 
