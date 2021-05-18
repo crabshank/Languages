@@ -868,12 +868,11 @@ for(let j = 0; j<rv.length; j++) {
 let e_out='';
 let e_out_f=[];
 let e_out_s=[];
-let og=[];
+let og=[...spr_ar].reverse();
 let og_f=[];
-
+	
 for(let i = spr_ar.length-1; i>=0; i--){
 	e_out='';
-	og.push(spr_ar[i]);
 if((spr_ar[i].charCodeAt(0)==13)||(spr_ar[i].charCodeAt(0)==10)){
 e_out=String.fromCharCode(10);
 }else{
