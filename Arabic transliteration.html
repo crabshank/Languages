@@ -964,8 +964,10 @@ e_out_s.push([e_out]);
 //so push: 49,48,47
 
 let push_this='';
-while (og_cnt>=i && og_cnt>=0){
+while (og_cnt>=i){
+if(og_cnt>=0){
 push_this+=spr_ar[og_cnt];
+}
 og_cnt--;
 }
 og_cnt=i;
