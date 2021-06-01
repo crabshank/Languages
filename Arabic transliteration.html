@@ -814,8 +814,10 @@ var asc=document.getElementById('og');
 var esc=document.getElementById('en');
 var dct=document.getElementById('dict');
 
-let dctRct=dct.getBoundingClientRect();
-en.style.top=(dctRct.bottom+dctRct.height)+'px';
+let ascRct=asc.getBoundingClientRect();
+dct.style.top=(ascRct.top)+'px';
+
+en.style.top=(ascRct.top+dct.clientHeight)+'px';
 
 function find_tl(code){
 let out='';
