@@ -7,7 +7,6 @@ div#en{
 direction: ltr;
 position: absolute;
 margin-left: 50%;
-top: 13%;
 text-align: left;
 font-size: 185%;
 min-width: 50%;
@@ -814,6 +813,9 @@ var shadda= [1617,65148,65149];
 var asc=document.getElementById('og');
 var esc=document.getElementById('en');
 var dct=document.getElementById('dict');
+
+let dctRct=dct.getBoundingClientRect();
+en.style.top=(dctRct.bottom+dctRct.height)+'px';
 
 function find_tl(code){
 let out='';
