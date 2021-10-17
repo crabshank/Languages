@@ -13,6 +13,8 @@ min-width: 50%;
 min-height: -webkit-fill-available;
 min-height: -moz-available;
 max-width: 50%;
+word-break: break-word;
+white-space: pre-wrap;
 }
 textarea{
 direction: rtl; 
@@ -73,6 +75,7 @@ text-align: center;
 
 var en_HTML='';
 var en_dct_HTML='';
+var tl_HTML='';
 
 var vwl=[378,
 379,
@@ -843,6 +846,7 @@ asc.style.height = 'inherit';
 asc.style.height = (asc.scrollHeight+1)+"px";
 en_HTML='';
 en_dct_HTML='';
+tl_HTML='';
 dct.innerText="Dictionary form";
 let ar_scr=asc.value;
 let l_ar_scr_1=ar_scr.split('ﹱ').join('ً');
@@ -1003,6 +1007,7 @@ for(let i = 0; i<og_out_s.length; i++){
 }
 
 var ruby='';
+var tlOut='';
 
 	for(let i = 0; i<rt.length; i++){
 		let sp_rt=[...rt[i]];
@@ -1015,25 +1020,30 @@ var ruby='';
 			rtt=sp_rt.join('');
 			rbt=sp_rb.join('');
 		ruby+='<hr><rb>'+rbt+'</rb><rt>'+rtt+'</rt></ruby>';
-		
+		tlOut+=rbt;
 		ruby=((last_ltr==32)||(last_ltr==160))?ruby+' ':ruby;
+		tlOut=((last_ltr==32)||(last_ltr==160))?tlOut+' ':tlOut;
 		ruby=((last_ltr==13)||(last_ltr==10))?ruby+'<br>':ruby;
+		tlOut=((last_ltr==13)||(last_ltr==10))?tlOut+'<br>':tlOut;
 		}else if(sp_rt.length==1){
 			if ((last_ltr==32)||(last_ltr==160)){
 				ruby+=' ';
+				tlOut+=' ';
 			}
 				else if((last_ltr==13)||(last_ltr==10)){
 				ruby+='<br>';
+				tlOut+='<br>';
 			}else{
 				ruby+='<ruby><hr><rb>'+sp_rb.join('')+'</rb><rt>'+sp_rt.join('')	+'</rt></ruby>';
+				tlOut+=sp_rb.join('');
 			}
 		}
 	}
 
 
-esc.innerHTML=ruby;
+esc.innerHTML=ruby+'<hr style="background: black; height: 3px; border-width: 0;">'+tlOut;
 en_HTML=ruby;
-
+tl_HTML=tlOut;
 }
 
  function devowel() {
@@ -1043,9 +1053,9 @@ esc.innerHTML=esc.innerHTML.split(String.fromCharCode(1648)).join('');
 			 for(let i = 0; i<vwl.length; i++){
 				 esc.innerHTML=esc.innerHTML.split(String.fromCharCode(vwl[i])).join('');
 			 }
-			 en_dct_HTML=esc.innerHTML;
+			 en_dct_HTML=esc.innerHTML+'<hr style="background: black; height: 3px; border-width: 0;">'+tl_HTML;
 		 }else{
-			esc.innerHTML=en_dct_HTML;
+			esc.innerHTML=en_dct_HTML+'<hr style="background: black; height: 3px; border-width: 0;">'+tl_HTML;
 		 }
 		 
 		 dct.innerText="Full form";
