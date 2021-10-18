@@ -3,6 +3,10 @@
 <head>
 <meta charset="utf-8"/>
 <style>
+blockquote{
+display: inline-flex;
+margin: 0px;
+}
 div#en{
 direction: ltr;
 position: absolute;
@@ -1017,25 +1021,26 @@ var tlOut='';
 		let last_ltr=sp_rt[Math.max(0,sp_rt.length-1)].charCodeAt(Math.max(og_out_s[i].length-1,0))
 		if (sp_rt.length>1){
 			ruby+='<ruby>';
+			tlOut+='<blockquote>';
 			rtt=sp_rt.join('');
 			rbt=sp_rb.join('');
 		ruby+='<hr><rb>'+rbt+'</rb><rt>'+rtt+'</rt></ruby>';
-		tlOut+=rbt;
-		ruby=((last_ltr==32)||(last_ltr==160))?ruby+' ':ruby;
-		tlOut=((last_ltr==32)||(last_ltr==160))?tlOut+' ':tlOut;
+		tlOut+=rbt+'</blockquote>';
+		ruby=((last_ltr==32)||(last_ltr==160))?ruby+'<blockquote>'+' '+'</blockquote>':ruby;
+		tlOut=((last_ltr==32)||(last_ltr==160))?tlOut+'<blockquote>'+' '+'</blockquote>':tlOut;
 		ruby=((last_ltr==13)||(last_ltr==10))?ruby+'<br>':ruby;
 		tlOut=((last_ltr==13)||(last_ltr==10))?tlOut+'<br>':tlOut;
 		}else if(sp_rt.length==1){
 			if ((last_ltr==32)||(last_ltr==160)){
-				ruby+=' ';
-				tlOut+=' ';
+				ruby+='<blockquote>'+' '+'</blockquote>';
+				tlOut+='<blockquote>'+' '+'</blockquote>';
 			}
 				else if((last_ltr==13)||(last_ltr==10)){
 				ruby+='<br>';
 				tlOut+='<br>';
 			}else{
 				ruby+='<ruby><hr><rb>'+sp_rb.join('')+'</rb><rt>'+sp_rt.join('')	+'</rt></ruby>';
-				tlOut+=sp_rb.join('');
+				tlOut+='<blockquote>'+sp_rb.join('')+'</blockquote>';
 			}
 		}
 	}
@@ -1060,7 +1065,7 @@ esc.innerHTML=esc.innerHTML.split(String.fromCharCode(1648)).join('');
 		 
 		 dct.innerText="Full form";
 	 }else{
-		esc.innerHTML=en_HTML;
+		esc.innerHTML=en_HTML+tl_HTML;
 		dct.innerText="Dictionary form";
 	 }
 	 
