@@ -1010,8 +1010,8 @@ for(let i = 0; i<og_out_s.length; i++){
 	s_cnt=(((last_ltr==32)||(last_ltr==160))||((last_ltr==13)||(last_ltr==10)))?s_cnt+1:s_cnt;
 }
 
-var ruby='';
-var tlOut='';
+var ruby='<section id="ar_en_trnsl">';
+var tlOut='<section id="en_trnsl">';
 
 	for(let i = 0; i<rt.length; i++){
 		let sp_rt=[...rt[i]];
@@ -1045,7 +1045,8 @@ var tlOut='';
 		}
 	}
 
-
+ruby+='</section>';
+tlOut+='</section>';
 esc.innerHTML=ruby+'<hr style="background: black; height: 3px; border-width: 0;">'+tlOut;
 en_HTML=ruby;
 tl_HTML=tlOut;
