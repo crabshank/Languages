@@ -4,7 +4,7 @@
 <meta charset="utf-8"/>
 <style>
 blockquote{
-display: inline-flex;
+display: contents;
 margin: 0px;
 }
 div#en{
@@ -1020,6 +1020,7 @@ for(let i = 0; i<og_out_s.length; i++){
 
 var ruby='<section id="ar_en_trnsl">';
 var tlOut='<section id="en_trnsl">';
+var spc=String.fromCharCode(32);
 
 	for(let i = 0; i<rt.length; i++){
 		let sp_rt=[...rt[i]];
@@ -1031,20 +1032,16 @@ var tlOut='<section id="en_trnsl">';
 			ruby+='<ruby>';
 			tlOut+='<blockquote>';
 			rtt=sp_rt.join('');
-			rbt=sp_rb.join('');
-			if((last_ltr==32)||(last_ltr==160)){
-				ruby+='<hr><rb>'+rbt+' </rb><rt>'+rtt+' </rt></ruby>';
-			}else{
-				ruby+='<hr><rb>'+rbt+'</rb><rt>'+rtt+'</rt></ruby>';
-			}
+			rbt=sp_rb.join('');	
+			ruby+='<hr><rb>'+rbt+'</rb><rt>'+rtt+'</rt></ruby>';
 		tlOut+=rbt+'</blockquote>';
-		tlOut=((last_ltr==32)||(last_ltr==160))?tlOut+'<blockquote>'+' '+'</blockquote>':tlOut;
+		tlOut=((last_ltr==32)||(last_ltr==160))?tlOut+'<blockquote>'+spc+'</blockquote>':tlOut;
 		ruby=((last_ltr==13)||(last_ltr==10))?ruby+'<br>':ruby;
 		tlOut=((last_ltr==13)||(last_ltr==10))?tlOut+'<br>':tlOut;
 		}else if(sp_rt.length==1){
 			if ((last_ltr==32)||(last_ltr==160)){
-				ruby+='<ruby><hr><rb> </rb><rt> </rt></ruby>';
-				tlOut+='<blockquote>'+' '+'</blockquote>';
+				ruby+='<ruby><hr><rb>'+spc+'</rb><rt>'+spc+'</rt></ruby>';
+				tlOut+='<blockquote>'+spc+'</blockquote>';
 			}else if((last_ltr==13)||(last_ltr==10)){
 				ruby+='<br>';
 				tlOut+='<br>';
