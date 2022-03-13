@@ -958,7 +958,11 @@ e_out=String.fromCharCode(10);
 						let fnd=[];
 						for(let k=e_out_s.length-1; k>=0; k--){
 							let e=e_out_s[k];
-							if((j>=e[1] && j<=e[2]) && (k>0) && (e_out_s[k-1]!==e[0]) ){
+							let e_prev;
+							if(k>0){
+								e_prev=e_out_s[k-1];
+							}
+							if(  (j>=e[1] && j<=e[2]) && (k==0 || ([...e_prev[0]][e_prev[0].length-1]!==[...e[0]][0]) )  ){
 								fnd=[e];
 								k=0;
 							}
