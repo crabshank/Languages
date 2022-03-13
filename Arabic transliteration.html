@@ -952,11 +952,11 @@ e_out=String.fromCharCode(10);
 		if(check_arr(a,shadda)==true){
 			if(i>0){
 			var l_c='';
-				for (j=i-1;j>=0;j--){
+				for (j=i+1, len=spr_ar.length; j<len;j++){
 					let cr=spr_ar[j].charCodeAt(0);
 					if(check_arr(cr,vwl)==false){
 						e_out=find_tl(cr);
-						j=0;
+						j=len-1;
 					}
 				}
 			}	
