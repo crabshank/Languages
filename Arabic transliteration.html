@@ -954,8 +954,8 @@ e_out=String.fromCharCode(10);
 			var l_c='';
 				for (j=i+1; j<len;j++){
 					let cr=spr_ar[j].charCodeAt(0);
-					if(check_arr(cr,vwl)==false){
-						//e_out=find_tl(cr);
+					if(check_arr(cr,vwl)==false && find_tl(cr)!=='' )
+					{
 						let fnd=[];
 						for(let k=e_out_s.length-1; k>=0; k--){
 							let e=e_out_s[k];
@@ -987,7 +987,7 @@ e_out=String.fromCharCode(10);
 	}else if(check_arr(a,madda)==true){
 			e_out="'ā";		
 	}else{
-if (c_out==''){
+if (c_out===''){
 e_out=spr_ar[i];
 }else{
 e_out=c_out;
