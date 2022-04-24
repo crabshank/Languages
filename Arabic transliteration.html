@@ -851,11 +851,11 @@ function check_arr(code,arr){
 return arr.includes(code);
 }
 
-asc.oninput= function() {transliterate()};
-asc.onchange= function() {transliterate()};
-dct.onclick= function() {devowel()};
+asc.oninput= function() {transliterate();};
+asc.onchange= function() {transliterate();};
+dct.onclick= function() {devowel();};
  
-function transliterate() {
+function transliterate(){
 asc.style.height = 'inherit';
 asc.style.height = (asc.scrollHeight+1)+"px";
 en_HTML='';
@@ -1075,7 +1075,7 @@ en_HTML=ruby;
 tl_HTML=tlOut;
 }
 
- function devowel() {
+ function devowel(){
 	 if (dct.innerText=="Dictionary form"){
 		 if (en_dct_HTML==""){
 esc.innerHTML=esc.innerHTML.split(String.fromCharCode(1648)).join('');
