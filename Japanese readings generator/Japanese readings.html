@@ -191,14 +191,14 @@ for(let i=0; i<len; i++){
 			bx=charTo_0x_Notation(b);
 			c=a;
 		}
-		rby.title='Repeats previous kanji';
+		sct.title='Repeats previous kanji';
 	}else if(ax=='0x30FD'){
 		if(i>0){
 			b=jsp[i-1];
 			bx=charTo_0x_Notation(b);
 			c=b;
 		}
-		rby.title='Repeats previous katakana';
+		sct.title='Repeats previous katakana';
 	}else if(ax=='0x30FE'){
 		if(i>0){
 			b=jsp[i-1];
@@ -213,14 +213,14 @@ for(let i=0; i<len; i++){
 				bx=ax;
 			}
 		}
-		rby.title='Repeats previous katakana with dakuten';
+		sct.title='Repeats previous katakana with dakuten';
 	}else if(ax=='0x309D'){
 		if(i>0){
 			b=jsp[i-1];
 			bx=charTo_0x_Notation(b);
 			c=b;
 		}
-		rby.title='Repeats previous hiragana';
+		sct.title='Repeats previous hiragana';
 	}else if(ax=='0x309E'){
 		if(i>0){
 			b=jsp[i-1];
@@ -234,14 +234,14 @@ for(let i=0; i<len; i++){
 				bx=ax;
 			}
 		}
-		rby.title='Repeats previous hiragana with dakuten';
+		sct.title='Repeats previous hiragana with dakuten';
 	}else if(ax=='0x3031'){
 		if(i>0){
 			b=jsp[i-1];
 			bx=charTo_0x_Notation(b);
 			c=b;
 		}
-		rby.title='Repeats previous kana';
+		sct.title='Repeats previous kana';
 	}else if(ax=='0x3032'){
 		if(i>0){
 			b=jsp[i-1];
@@ -256,7 +256,7 @@ for(let i=0; i<len; i++){
 				bx=ax;
 			}
 		}
-		rby.title='Repeats previous kana with dakuten';
+		sct.title='Repeats previous kana with dakuten';
 	}else if(ax=='0x3033'){
 		for(let k=i+1; k<len; k++){
 			 if(charTo_0x_Notation(jsp[k])==='0x3035'){
@@ -274,7 +274,7 @@ for(let i=0; i<len; i++){
 				k=len-1;
 			 }
 		}
-		rby.title='Repeats enclosed kana';
+		sct.title='Repeats enclosed kana';
 	}else if(ax=='0x3034'){
 			let ix=dak.findIndex((d)=>{return d[0]===charTo_0x_Notation(jsp[i+1]);});
 			if(ix>=0){
@@ -297,13 +297,13 @@ for(let i=0; i<len; i++){
 				bx=ax;
 			}
 
-		rby.title='Repeats enclosed kana with dakuten';
+		sct.title='Repeats enclosed kana with dakuten';
 	}else if(ax=='0x3063'){
-		rby.title='Doubles the nex consonant (hiragana)';
+		sct.title='Doubles the nex consonant (hiragana)';
 	}else if(ax=='0x30C4'){
-		rby.title='Doubles the nex consonant (katkana)';
+		sct.title='Doubles the nex consonant (katkana)';
 	}else if(ax=='0x30FC'){
-		rby.title='Lengthens sound of previous vowel';
+		sct.title='Lengthens sound of previous vowel';
 	}
 	
 	let d,dx;
