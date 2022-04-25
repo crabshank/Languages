@@ -278,14 +278,17 @@ for(let i=0; i<len; i++){
 	}else if(ax=='0x3034'){
 			let ix=dak.findIndex((d)=>{return d[0]===charTo_0x_Notation(jsp[i+1]);});
 			if(ix>=0){
-					a=jsp[i+1]+String.fromCodePoint(dak[ix][1]);
-					b=a;
+				a='';
+				b='';
 				for(let k=i+1; k<len; k++){
 					 if(charTo_0x_Notation(jsp[k])==='0x3035'){
-						for(let j=i+2; j<k; j++){
+						for(let j=i+1; j<k; j++){
 							a+=jsp[j];
 							b+=jsp[j];
 						}
+						let st=String.fromCodePoint(dak[ix][1]);
+						a+=st+a.slice(1);
+						b+=st+b.slice(1);
 						bx=null;
 						ax=null;
 						i=k;
