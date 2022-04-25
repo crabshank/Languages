@@ -7,7 +7,7 @@
 <body>
 <script src="kanjidic2_raw.js"></script>
 <script>
-/* TO CREATE READINGS ARRAY ('kanjidic2_rdgs') FROM FULL .XML DATABASE STORED AS .JS STRING:
+/*TO CREATE READINGS ARRAY ('kanjidic2_rdgs') FROM FULL .XML DATABASE STORED AS .JS STRING:
 
 function charTo_0x_Notation(c){
 	return '0x'+c.codePointAt(0).toString(16).toLocaleUpperCase();
@@ -18,6 +18,7 @@ var parser = new DOMParser();
 var kanjidic2_xml = parser.parseFromString(kanjidic2,"text/xml");
 	var chars = [...kanjidic2_xml.getElementsByTagName('character')];
 	var kanjidic2_rdgs=[];
+	//var firsts=[];
 	chars.forEach((c)=>{
 		let cdp=[...c.querySelectorAll('cp_value[cp_type="ucs"]')];
 		let okn=[...c.querySelectorAll('reading[r_type="ja_on"]'), ...c.querySelectorAll('reading[r_type="ja_kun"]'), ...c.querySelectorAll('nanori')];
@@ -29,12 +30,13 @@ var kanjidic2_xml = parser.parseFromString(kanjidic2,"text/xml");
 				let n=(r.nodeName=='nanori')?r.nodeName:r.getAttribute('r_type');
 				for(let k=0, len=ds.length; k<len; k++){
 					okn_full.push([ds[k].trim(),n]);
+					//firsts.push([...ds[k].trim()][0]);
 				}
 			});
 			kanjidic2_rdgs.push(['0x'+cdp[0].textContent.toLocaleUpperCase(), ...okn_full]);
 		}
 	});
-	
+	//console.log(Array.from(new Set(firsts)));
 const dak=[
 	["0x304B","0x304C"],
 	["0x304D","0x304E"],
@@ -112,6 +114,11 @@ for(let i=0, len1=kanjidic2_rdgs.length; i<len1; i++){
 	let  len2=kanjidic2_rdgs[i].length;
 	for(let k=1; k<len2;  k++){
 		let spl=[...kanjidic2_rdgs[i][k][0]];
+		if(spl[0]=='-'){
+			spl=spl.slice(1);
+			//console.log(i+': ');
+			//console.log(spl);
+		}
 		let is_309A=false;
 		if(spl.length>=2){
 			if( (hdak_309A.includes( charTo_0x_Notation(spl[0]) )  ) && (charTo_0x_Notation(spl[1])==='0x309A')
@@ -144,8 +151,8 @@ for(let i=0, len1=kanjidic2_rdgs.length; i<len1; i++){
 	}
 }
 
-console.log(kanjidic2_rdgs);
-*/
+console.log(kanjidic2_rdgs);*/
+
 </script>
 </body>
 
