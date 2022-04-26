@@ -186,7 +186,7 @@ cBtn.onpointerup=(event)=>{
 				if(sc.length>0){
 					sc.forEach((s)=>{
 						s.style.display='none';
-						s.setAttribute('ent',0);
+						s.parentElement.setAttribute('ent',0);
 					});
 				}
 }
@@ -432,12 +432,12 @@ for(let i=0; i<len; i++){
 			sct.onpointerup=function(event){
 				let sc=event.currentTarget.children[0];
 				if(sc.length>0 && !event.path.includes(sc)){
-					if(sc.getAttribute('ent')*1==0){
+					if(event.currentTarget.getAttribute('ent')*1==0){
 						sc.style.display='flex';	
-						sc.setAttribute('ent',1);
+						event.currentTarget.setAttribute('ent',1);
 					}else{
 						sc.style.display='none';
-						sc.setAttribute('ent',0);
+						event.currentTarget.setAttribute('ent',0);
 					}
 				}
 			}		
