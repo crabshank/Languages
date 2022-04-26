@@ -13,13 +13,12 @@ min-width: 50%;
 min-height: -webkit-fill-available;
 min-height: -moz-available;
 word-break: break-word;
-white-space: pre-wrap;
+white-space: pre-line;
 }
 textarea{
 direction: ltr; 
 text-align: left;
-font-family: -webkit-pictograph;
-font-size: 297%;
+font-size: 346%;
 box-shadow: 0 0 0px 2px black;
 border-width: 0px;
 min-width: -webkit-fill-available;
@@ -36,10 +35,12 @@ div#rd section:hover{
  color: hsl(235deg 100% 50%);
 }
 ruby > rt{
-font-family: -webkit-pictograph;
 font-size: 64%;
+display: grid;
+text-align: center;
 }
 ruby > rb{
+font-family: SimSun !important;
 -webkit-touch-callout: none;
 -webkit-user-select: none;
 -khtml-user-select: none; 
@@ -52,13 +53,13 @@ text-align: center;
 }
 div#rd section{
 text-align: center;
-}
-div#rd section{	
 display: inline-block;
 margin-left: 0.65%;
 margin-bottom: 1.1%;
 margin-right: 0.65%;
+vertical-align: bottom;
 }
+
 </style>
 <title>Japanese kanji readings generator / 漢字の読みの生成器</title>
 </head>
@@ -164,6 +165,7 @@ const r_order=[
 
 var jsc=document.getElementById('og');
 var rdv=document.getElementById('rd');
+var doing_gen_rd=false;
 
 document.body.scrollTop = 0;
 
@@ -171,191 +173,242 @@ let jscRct=jsc.getBoundingClientRect();
 
 rdv.style.top=(jscRct.top)+'px';
 
+function get_dakuten_hx(x){
+	let ix=dak.findIndex((d)=>{return d[0]===x;});
+	return (ix>=0)?String.fromCodePoint(dak[ix][1]):'';
+}
+
+function sortByArrCols(arr, colsArr, dir){
+    arr.sort(sortFunction);
+		function sortFunction(a, b) {
+			for(let i = 0; i < arr.length; i++){
+					if(a[colsArr[i]]>b[colsArr[i]]){
+						return dir[i]*-1;
+					}else if(a[colsArr[i]]<b[colsArr[i]]){
+						return dir[i]*1;
+					}else if(i==arr.length-1){
+					return 0;
+				}
+			} 
+	}
+}
+
+function guessBest(){
+let sl=[...document.querySelectorAll('div#rd section')];
+
+for(let i=0, len=sl.length; i<len; i++){
+	let sel=sl[i].querySelector('select');
+	if(!!sel && sel.getAttribute('mn_chg')=="false"){
+		let rds=[...sel.children].map((c,index)=>{return [index,c.textContent];});
+		let rdsPlus=rds.filter((c)=>{return c[1].split('(').length>2;});
+		let rdsPlusEds=rdsPlus.map((c)=>{return [c[0],c[1].split('(')[1].split(')')[0]];});
+		let rdsPlusNext=[];
+		
+		console.log(rdsPlusEds);
+		for(let a=0, lenA=rdsPlusEds.length; a<lenA; a++){
+			let nt='';
+			for(let k=i+1, lenK=sl.length; k<lenK; k++){
+					let rt=sl[k].querySelector('rt');
+					if(sl[k].querySelector('select')==null){
+						if(rt!=null){
+							nt+=rt.innerText;
+						}else{
+							nt+=sl[k].innerText;
+						}
+					}else{
+						nt+=rt.innerText;
+					}
+					if(nt.length>rdsPlusEds[a][1].length){
+						k=lenK-1;
+					}
+				}
+				rdsPlusNext.push([rdsPlusEds[a][0],nt]);
+			}
+			
+			let rdsPlusScore=rdsPlusNext.map((r)=>{return [r[0],0]});
+			
+			for(let a=0, lenA=rdsPlusNext.length; a<lenA; a++){
+				let spSrch=[...rdsPlusEds[a][1]];
+				let spAct=[...rdsPlusNext[a][1]];
+				for(let b=0, lenB=spSrch.length; b<lenB; b++){
+					if(spSrch[b]==spAct[b]){
+						rdsPlusScore[a][1]++;
+					}else{
+						b=lenB-1;
+					}
+				}
+			}
+			
+			sortByArrCols(rdsPlusScore,[1,0],[1,-1]);
+			if(sel.selectedIndex!=rdsPlusScore[0][0]){
+				sel.selectedIndex=rdsPlusScore[0][0];
+				sel.dispatchEvent(new Event('input'));
+			}
+		}
+	}
+}
+
 function gen_readings(){
 rdv.innerHTML='';
 let jsp=[...jsc.value];
 let len=jsp.length;
 var sct=document.createElement('SECTION');
 rdv.appendChild(sct);
-var lOpt=false;
+var lastSctOpt=false;
+	
 for(let i=0; i<len; i++){
-	let a=jsp[i];
-	var b=jsp[i];
-	var c=null;
-	let ax=charTo_0x_Notation(a);
-	var bx=charTo_0x_Notation(b);
+	let curr={char: jsp[i], code: charTo_0x_Notation(jsp[i])};
+	let out_char={inciter: '', result: '', rdgs: [], expl: ''};
+	let full_repeated='';
+	let repeated_str={pre: '', post: ''};
+	let repeater={char: '', expl: ''};
+	let useChar=true;
+	let subRout=-1;
 	
-	if(ax=='0x3005' || ax=='0x4EDD'){
-		if(i>0){
-			b=jsp[i-1];
-			bx=charTo_0x_Notation(b);
-			c=a;
-		}
-		sct.title='Repeats previous kanji';
-	}else if(ax=='0x30FD'){
-		if(i>0){
-			b=jsp[i-1];
-			bx=charTo_0x_Notation(b);
-			c=b;
-		}
-		sct.title='Repeats previous katakana';
-	}else if(ax=='0x30FE'){
-		if(i>0){
-			b=jsp[i-1];
-			bx=charTo_0x_Notation(b);
-			let ix=dak.findIndex((d)=>{return d[0]===bx;});
-			if(ix>=0){
-				b=String.fromCodePoint(dak[ix][1]);
-				bx=charTo_0x_Notation(b);
-				c=b;
-			}else{
-				b=a;
-				bx=ax;
+	if(curr.code=='0x3005' || curr.code=='0x4EDD'){
+		subRout=0;
+		out_char.expl='"'+curr.char+'" Repeats previous kanji';
+	}else if(curr.code=='0x30FD'){
+		subRout=1;
+		out_char.expl='"'+curr.char+'" Repeats previous katakana';
+	}else if(curr.code=='0x30FE'){
+		subRout=2;
+		out_char.expl='"'+curr.char+'" Repeats previous katakana with dakuten';
+	}else if(curr.code=='0x309D'){
+		subRout=1;
+		out_char.expl='"'+curr.char+'" Repeats previous hiragana';
+	}else if(curr.code=='0x309E'){
+		subRout=2;
+		out_char.expl='"'+curr.char+'" Repeats previous hiragana with dakuten';
+	}else if(curr.code=='0x3031'){
+		subRout=1;
+		out_char.expl='"'+curr.char+'" Repeats previous kana';
+	}else if(curr.code=='0x3032'){
+		subRout=2;
+		out_char.expl='"'+curr.char+'" Repeats previous kana with dakuten';
+	}else if(curr.code=='0x3033'){
+		subRout=3;
+		out_char.expl='Repeats enclosed kana';
+	}else if(curr.code=='0x3034'){
+		subRout=4;
+		out_char.expl='Repeats enclosed kana with dakuten';
+	}else if(curr.code=='0x3063'){
+		out_char.expl='"'+curr.char+'" Doubles the next consonant (hiragana)';
+		full_repeated=curr.char;
+	}else if(curr.code=='0x30C4'){
+		out_char.expl='"'+curr.char+'" Doubles the next consonant (katkana)';
+		full_repeated=curr.char;
+	}else if(curr.code=='0x30FC'){
+		out_char.expl='"'+curr.char+'" Lengthens sound of previous vowel';
+		full_repeated=curr.char;
+	}
+
+	if(subRout==-1 || subRout==0){
+		out_char.inciter=curr.char;
+			let k=(subRout==0 && i>0)?charTo_0x_Notation(jsp[i-1]):charTo_0x_Notation(jsp[i]);
+			let kix=kanjidic2_rdgs.findIndex((r)=>{return r[0]==k;});
+			if(kix>=0){
+				out_char.rdgs=kanjidic2_rdgs[kix];
+			}else if(subRout==-1){
+				useChar=false;
+				if(lastSctOpt){
+					sct=document.createElement('SECTION');
+					rdv.appendChild(sct);
+					lastSctOpt=false;
+				}
 			}
-		}
-		sct.title='Repeats previous katakana with dakuten';
-	}else if(ax=='0x309D'){
-		if(i>0){
-			b=jsp[i-1];
-			bx=charTo_0x_Notation(b);
-			c=b;
-		}
-		sct.title='Repeats previous hiragana';
-	}else if(ax=='0x309E'){
-		if(i>0){
-			b=jsp[i-1];
-			bx=charTo_0x_Notation(b);
-			let ix=dak.findIndex((d)=>{return d[0]===bx;});
-			if(ix>=0){
-				b=String.fromCodePoint(dak[ix][1]);
-				bx=charTo_0x_Notation(b);
-			}else{
-				b=a;
-				bx=ax;
-			}
-		}
-		sct.title='Repeats previous hiragana with dakuten';
-	}else if(ax=='0x3031'){
-		if(i>0){
-			b=jsp[i-1];
-			bx=charTo_0x_Notation(b);
-			c=b;
-		}
-		sct.title='Repeats previous kana';
-	}else if(ax=='0x3032'){
-		if(i>0){
-			b=jsp[i-1];
-			bx=charTo_0x_Notation(b);
-			let ix=dak.findIndex((d)=>{return d[0]===bx;});
-			if(ix>=0){
-				b=String.fromCodePoint(dak[ix][1]);
-				bx=charTo_0x_Notation(b);
-				c=b;
-			}else{
-				b=a;
-				bx=ax;
-			}
-		}
-		sct.title='Repeats previous kana with dakuten';
-	}else if(ax=='0x3033'){
+	}else if(subRout==1){
+		out_char.inciter=curr.char;
+		out_char.result=(i>0)?jsp[i-1]:'';
+	}else if(subRout==2){
+		out_char.inciter=curr.char;
+		let d=(i>0)?get_dakuten_hx(charTo_0x_Notation(jsp[i-1])):'';
+		out_char.result=(d=='')?curr.char:d;
+	}else if(subRout==3 || subRout==4){
+		useChar=false;
 		for(let k=i+1; k<len; k++){
-			 if(charTo_0x_Notation(jsp[k])==='0x3035'){
-				b='';
-				a='';
+			 if(charTo_0x_Notation(jsp[k])=='0x3035'){
+				repeater.char=curr.char;
+				full_repeated=curr.char;
 				for(let j=i+1; j<k; j++){
-					b+=jsp[j];
-					a+=jsp[j];
+					repeated_str.pre+=jsp[j];
+					full_repeated+=jsp[j];
 				}
-				b+=b;
-				a+=a;
-				bx=null;
-				ax=null;
-				i=k;
+				full_repeated+=jsp[k];
+				if(subRout==4){
+					let d=get_dakuten_hx( charTo_0x_Notation(repeated_str.pre[0]) );
+					repeated_str.post=repeated_str.pre+d+repeated_str.pre.slice(1);
+				}else{
+					repeated_str.post=repeated_str.pre;
+				}
 				k=len-1;
-			 }
-		}
-		sct.title='Repeats enclosed kana';
-	}else if(ax=='0x3034'){
-			let ix=dak.findIndex((d)=>{return d[0]===charTo_0x_Notation(jsp[i+1]);});
-			if(ix>=0){
-				a='';
-				b='';
-				for(let k=i+1; k<len; k++){
-					 if(charTo_0x_Notation(jsp[k])==='0x3035'){
-						for(let j=i+1; j<k; j++){
-							a+=jsp[j];
-							b+=jsp[j];
-						}
-						let st=String.fromCodePoint(dak[ix][1]);
-						a+=st+a.slice(1);
-						b+=st+b.slice(1);
-						bx=null;
-						ax=null;
-						i=k;
-						k=len-1;
-					 }
-				}
-			}else{
-				b=a;
-				bx=ax;
+				i=k;
 			}
-
-		sct.title='Repeats enclosed kana with dakuten';
-	}else if(ax=='0x3063'){
-		sct.title='Doubles the nex consonant (hiragana)';
-	}else if(ax=='0x30C4'){
-		sct.title='Doubles the nex consonant (katkana)';
-	}else if(ax=='0x30FC'){
-		sct.title='Lengthens sound of previous vowel';
+		}
 	}
 	
-	let d,dx;
+	if(useChar){
 	
-	if(!!c){
-		d=c;
-		dx=ax;
-	}else{
-		d=b;
-		dx=bx;
-	}
-	
-	if(!!dx){
-		let kix=kanjidic2_rdgs.findIndex((r)=>{return r[0]===bx;});
+		if(sct.innerText!=''){
+				sct=document.createElement('SECTION');
+				rdv.appendChild(sct);
+				lastSctOpt=false;
+		}
+			
+		if(out_char.expl!=''){
+			sct.title=out_char.expl;
+		}
 		
-		if(kix>=0){	
-			rdv.appendChild(sct);
-			sct=document.createElement('SECTION');
-			rdv.appendChild(sct);
-			var slc=document.createElement('SELECT');
-			var rby=document.createElement('ruby');
-			var rb=document.createElement('rb');
-			var rt=document.createElement('rt');
+		var rby=document.createElement('ruby');
+		var rb=document.createElement('rb');
+		var rt=document.createElement('rt');
+		rby.appendChild(rt);
+		rby.appendChild(rb);
 
+		rb.innerText=(subRout==-1)?curr.char:out_char.inciter;
 
-			rby.appendChild(rb);
-			rby.appendChild(rt);
-			sct.appendChild(slc);
-			sct.appendChild(rby);
-			lOpt=true;
-			let kr=kanjidic2_rdgs[kix];
+		if(out_char.rdgs.length>0){
+		var slc=document.createElement('SELECT');
+		slc.setAttribute('mn_chg',false);
+		sct.appendChild(slc);
 			for(let r=0, lr=r_order.length; r<lr; r++){
-				let fl=kr.filter((k,index)=>{return index>0 && k[1]===r_order[r][0]});
+				let fl=out_char.rdgs.filter((k,index)=>{return index>0 && k[1]===r_order[r][0]});
 				fl.forEach(g => {
 					// Create option element
 					let option = document.createElement('option');
 					// Fill option with voice and language
-					option.textContent = g[0]+' ('+r_order[r][1]+')';
-					option.setAttribute('kana',(g[0].startsWith('-')?g[0].slice(1):g[0]));
+					let rd=r_order[r][1];
+					option.textContent = g[0]+' ('+rd+')';
+					option.setAttribute('kana',(g[0].startsWith('-')?g[0].slice(1).split('(')[0]:g[0].split('(')[0]));
+					option.setAttribute('reading',rd);
 					option.style.color="black";
 					slc.appendChild(option);	
 				});
 			}
+			lastSctOpt=true;
+			rt.innerText=slc[0].getAttribute('kana');
+			let d='\<'+slc[0].getAttribute('reading')+'\>';
+			sct.title=d;
 			
 			slc.style.display='none';
 			slc.oninput= function(event){
+				slc.setAttribute('mn_chg',true);
 				let sc=event.target;
-				sc.nextSibling.children[1].innerText=sc[sc.selectedIndex].getAttribute('kana');
+				sc.nextSibling.children[0].innerText=sc[sc.selectedIndex].getAttribute('kana');
+				let d='\<'+sc[sc.selectedIndex].getAttribute('reading')+'\>';
+				sc.parentElement.title=d;
+				guessBest();
 			}
+				sct.appendChild(rby);
+		}else{
+			rt.innerText=out_char.result;
+				sct.appendChild(rby);
+				sct.appendChild(rDiv);
+			sct=document.createElement('SECTION');
+			rdv.appendChild(sct);
+		}
+			
+
 			sct.setAttribute('ent',0);
 			sct.onpointerup=function(event){
 				let sc=event.currentTarget.children[0];
@@ -364,42 +417,54 @@ for(let i=0; i<len; i++){
 						sc.style.display='flex';	
 						sc.setAttribute('ent',1);
 					}else{
-						sc.style.display='none';	
+						sc.style.display='none';
 						sc.setAttribute('ent',0);
+						sc.nextSibling.nextSibling.style.display='none';
 					}
 				}
-			}
-			
-			rb.innerText=d;
-			rt.innerText=slc[slc.selectedIndex].getAttribute('kana');
-			nw=true;
-			lOpt=true;
-		}else{
-		if(lOpt){
-			rdv.appendChild(sct);
-			sct=document.createElement('SECTION');
-			rdv.appendChild(sct);
-		}
-			sct.innerText+=d;
-			lOpt=false;
-		}
-		
+			}		
+
 	}else{
-			if(lOpt){
-				rdv.appendChild(sct);
-				sct=document.createElement('SECTION');
-				rdv.appendChild(sct);
+		if(out_char.expl!=''){
+		
+			if(sct.innerText!=''){
+					sct=document.createElement('SECTION');
+					rdv.appendChild(sct);
+					lastSctOpt=false;
+			}
+			sct.title=out_char.expl;
+				
+			var rby=document.createElement('ruby');
+			var rb=document.createElement('rb');
+			var rt=document.createElement('rt');
+			rby.appendChild(rt);
+			rby.appendChild(rb);
+			sct.appendChild(rby);
+			
+			rt.innerText=repeated_str.post;
+			rb.innerText=full_repeated;
+			
+		}else{
+			sct.innerText+=curr.char;
 		}
-		sct.innerText+=d;
-		lOpt=false;
 	}
-	
-}
 
 }
 
-jsc.oninput= function(){gen_readings();};
-jsc.onchange= function(){gen_readings();};
+guessBest();
+
+}
+
+function genRdChk(){
+	if(!doing_gen_rd){
+		doing_gen_rd=true;
+		gen_readings();
+		doing_gen_rd=false;
+	}
+}
+
+jsc.oninput= function(){genRdChk();};
+jsc.onchange= function(){genRdChk();};
 
 </script>
 </body>
