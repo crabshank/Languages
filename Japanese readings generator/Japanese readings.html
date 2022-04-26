@@ -59,7 +59,9 @@ margin-bottom: 1.1%;
 margin-right: 0.65%;
 vertical-align: bottom;
 }
-
+button#collapsr{
+position: absolute;
+}
 </style>
 <title>Japanese kanji readings generator / 漢字の読みの生成器</title>
 </head>
@@ -68,6 +70,7 @@ vertical-align: bottom;
 </style>
 <h1>Japanese kanji readings generator / 漢字の読みの生成器</h1>
 <textarea id="og"></textarea>
+<button id="collapsr">Hide all menus / すべてのメニューを非表示</button>
 <div id="rd"></div>
 <script src="kanjidic2.js"></script>
 <script>
@@ -165,13 +168,28 @@ const r_order=[
 
 var jsc=document.getElementById('og');
 var rdv=document.getElementById('rd');
+var cBtn=document.getElementById('collapsr');
 var doing_gen_rd=false;
 
 document.body.scrollTop = 0;
 
 let jscRct=jsc.getBoundingClientRect();
 
-rdv.style.top=(jscRct.top)+'px';
+cBtn.style.top=(jscRct.top)+'px';
+cBtn.style.left=(jscRct.right+2)+'px';
+cBtn.style.background='buttonface';
+let cBtnRct=cBtn.getBoundingClientRect();
+rdv.style.top=(jscRct.top+cBtnRct.height+4)+'px';
+
+cBtn.onpointerup=(event)=>{
+				let sc=[...document.querySelectorAll('div#rd section select')];
+				if(sc.length>0){
+					sc.forEach((s)=>{
+						s.style.display='none';
+						s.setAttribute('ent',0);
+					});
+				}
+}
 
 function get_dakuten_hx(x){
 	let ix=dak.findIndex((d)=>{return d[0]===x;});
