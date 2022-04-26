@@ -202,47 +202,48 @@ for(let i=0, len=sl.length; i<len; i++){
 		let rds=[...sel.children].map((c,index)=>{return [index,c.textContent];});
 		let rdsPlus=rds.filter((c)=>{return c[1].split('(').length>2;});
 		let rdsPlusEds=rdsPlus.map((c)=>{return [c[0],c[1].split('(')[1].split(')')[0]];});
-		let rdsPlusNext=[];
-		
-		console.log(rdsPlusEds);
-		for(let a=0, lenA=rdsPlusEds.length; a<lenA; a++){
-			let nt='';
-			for(let k=i+1, lenK=sl.length; k<lenK; k++){
-					let rt=sl[k].querySelector('rt');
-					if(sl[k].querySelector('select')==null){
-						if(rt!=null){
-							nt+=rt.innerText;
+		if(rdsPlusEds.length>0){
+			let rdsPlusNext=[];
+			
+			for(let a=0, lenA=rdsPlusEds.length; a<lenA; a++){
+				let nt='';
+				for(let k=i+1, lenK=sl.length; k<lenK; k++){
+						let rt=sl[k].querySelector('rt');
+						if(sl[k].querySelector('select')==null){
+							if(rt!=null){
+								nt+=rt.innerText;
+							}else{
+								nt+=sl[k].innerText;
+							}
 						}else{
-							nt+=sl[k].innerText;
+							nt+=rt.innerText;
 						}
-					}else{
-						nt+=rt.innerText;
+						if(nt.length>rdsPlusEds[a][1].length){
+							k=lenK-1;
+						}
 					}
-					if(nt.length>rdsPlusEds[a][1].length){
-						k=lenK-1;
+					rdsPlusNext.push([rdsPlusEds[a][0],nt]);
+				}
+				
+				let rdsPlusScore=rdsPlusNext.map((r)=>{return [r[0],0]});
+				
+				for(let a=0, lenA=rdsPlusNext.length; a<lenA; a++){
+					let spSrch=[...rdsPlusEds[a][1]];
+					let spAct=[...rdsPlusNext[a][1]];
+					for(let b=0, lenB=spSrch.length; b<lenB; b++){
+						if(spSrch[b]==spAct[b]){
+							rdsPlusScore[a][1]++;
+						}else{
+							b=lenB-1;
+						}
 					}
 				}
-				rdsPlusNext.push([rdsPlusEds[a][0],nt]);
-			}
-			
-			let rdsPlusScore=rdsPlusNext.map((r)=>{return [r[0],0]});
-			
-			for(let a=0, lenA=rdsPlusNext.length; a<lenA; a++){
-				let spSrch=[...rdsPlusEds[a][1]];
-				let spAct=[...rdsPlusNext[a][1]];
-				for(let b=0, lenB=spSrch.length; b<lenB; b++){
-					if(spSrch[b]==spAct[b]){
-						rdsPlusScore[a][1]++;
-					}else{
-						b=lenB-1;
-					}
+				
+				sortByArrCols(rdsPlusScore,[1,0],[1,-1]);
+				if(sel.selectedIndex!=rdsPlusScore[0][0]){
+					sel.selectedIndex=rdsPlusScore[0][0];
+					sel.dispatchEvent(new Event('input'));
 				}
-			}
-			
-			sortByArrCols(rdsPlusScore,[1,0],[1,-1]);
-			if(sel.selectedIndex!=rdsPlusScore[0][0]){
-				sel.selectedIndex=rdsPlusScore[0][0];
-				sel.dispatchEvent(new Event('input'));
 			}
 		}
 	}
