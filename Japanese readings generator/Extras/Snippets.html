@@ -13,12 +13,11 @@ function charTo_0x_Notation(c){
 	return '0x'+c.codePointAt(0).toString(16).toLocaleUpperCase();
 }
 
-
 var parser = new DOMParser();
 var kanjidic2_xml = parser.parseFromString(kanjidic2,"text/xml");
 	var chars = [...kanjidic2_xml.getElementsByTagName('character')];
 	var kanjidic2_rdgs=[];
-	//var firsts=[];
+
 	chars.forEach((c)=>{
 		let cdp=[...c.querySelectorAll('cp_value[cp_type="ucs"]')];
 		let okn=[...c.querySelectorAll('reading[r_type="ja_on"]'), ...c.querySelectorAll('reading[r_type="ja_kun"]'), ...c.querySelectorAll('nanori')];
@@ -26,17 +25,18 @@ var kanjidic2_xml = parser.parseFromString(kanjidic2,"text/xml");
 			let okn_full=[];
 			okn.forEach((r)=>{
 				let d=r.textContent;
-				let ds=d.split('.');
+				let ds=d.split(' ');
 				let n=(r.nodeName=='nanori')?r.nodeName:r.getAttribute('r_type');
 				for(let k=0, len=ds.length; k<len; k++){
-					okn_full.push([ds[k].trim(),n]);
-					//firsts.push([...ds[k].trim()][0]);
+					let dst=ds[k].trim();
+					let rs=(dst.includes('.'))?dst.split('.').join('(')+')':dst;
+					okn_full.push([rs,n]);
 				}
 			});
 			kanjidic2_rdgs.push(['0x'+cdp[0].textContent.toLocaleUpperCase(), ...okn_full]);
 		}
 	});
-	//console.log(Array.from(new Set(firsts)));
+
 const dak=[
 	["0x304B","0x304C"],
 	["0x304D","0x304E"],
