@@ -687,7 +687,7 @@ const trlr=[[1536,'#'],
 [65020,'riyāl'],
 [65021,'bi-smi llāh ar-raḥmān ar-raḥīm'],
 [65136,'an'],
-//[65137,'an'],
+[65137,'an'],
 [65138,'un'],
 [65140,'in'],
 [65152,"'"],
@@ -816,6 +816,15 @@ const trlr=[[1536,'#'],
 [65275,'lā'],
 [65276,'lā']];
 
+const iqdaam=[
+	1610,
+	1585,
+	1605,
+	1604,
+	1608,
+	1606
+];
+
 const yeh= [65266,65267,65268,65265,1610];
 const waw= [1608,65261,65262];
 const madda= [1764,1619];
@@ -863,8 +872,7 @@ en_dct_HTML='';
 tl_HTML='';
 dct.innerText="Dictionary form";
 let ar_scr=asc.value;
-let l_ar_scr_1=ar_scr.split('ﹱ').join('ً');
-let l_ar_scr_2=l_ar_scr_1.split('ـ').join('');
+let l_ar_scr_2=ar_scr.split('ـ').join('');
 let l_ar_scr_3=l_ar_scr_2.split(String.fromCharCode(8205)).join('');
 let l_ar_scr=l_ar_scr_3.split(String.fromCharCode(10));
 let spr_ar=[];
@@ -956,17 +964,33 @@ e_out=String.fromCharCode(10);
 	}else if(a==1611 && b==1575){
 		e_out="an";
 			i-=1;
-	}else if(a==1577){
-		if(b==1612){
-			e_out="-ahtun";
-		}else if(b==1613){
-			e_out="-ahtin";
-		}else if(b==1611){
-			e_out="-ahtan";
-		}else{	
-			e_out=find_tl(a);
-		}
-		i-=1;
+	}else if(a==1577 || a==65137 || a==2279 || a==2288){
+			if(iqdaam.includes(b) && a==2288){
+				e_out="a";
+			}else if(b==1612){
+				e_out="-ahtun";
+			}else if(b==1613){
+				e_out="-ahtin";
+			}else if(b==1611){
+				e_out="-ahtan";	
+			}else{	
+				e_out=find_tl(a);
+			}
+			i-=1;
+	}else if(a==2289){
+			if(iqdaam.includes(b)){
+				e_out="u";
+			}else{	
+				e_out=find_tl(a);
+			}
+			i-=1;
+	}else if(a==2290){
+			if(iqdaam.includes(b)){
+				e_out="i";
+			}else{	
+				e_out=find_tl(a);
+			}
+			i-=1;
 	}else{
 		
 		if(check_arr(a,shadda)==true){
