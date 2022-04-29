@@ -474,11 +474,13 @@ guessBest();
 }
 
 function genRdChk(){
-	if(!doing_gen_rd){
-		doing_gen_rd=true;
-		gen_readings();
-		doing_gen_rd=false;
-	}
+	try{
+			if(!doing_gen_rd){
+				doing_gen_rd=true;
+				gen_readings();
+				doing_gen_rd=false;
+			}
+		}catch(e){doing_gen_rd=false;}
 }
 
 jsc.oninput= function(){genRdChk();};
