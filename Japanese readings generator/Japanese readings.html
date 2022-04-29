@@ -443,8 +443,10 @@ for(let i=0; i<len; i++){
 			sct.onpointerup=function(event){
 				let sc=event.currentTarget.children[0];
 				let selct=document.getSelection();
-				let rtp=(event.path.map((p)=>{return p.nodeName}).includes('RT'))?true:false;
-				if(sc.length>0 &&(
+				let pmap=(event.path.map((p)=>{return p.nodeName}));
+				let rtp=pmap.includes('RT')?true:false;
+				let slp=pmap.includes('SELECT')?true:false;
+				if(sc.length>0 && slp==false &&(
 				(rtp==true && selct.type==="Caret" && selct.isCollapsed ) ||
 				rtp==false
 				)
