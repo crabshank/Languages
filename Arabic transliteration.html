@@ -87,6 +87,7 @@ text-align: center;
 var en_HTML='';
 var en_dct_HTML='';
 var tl_HTML='';
+var doing_tl=false;
 
 const vwl=[378,
 379,
@@ -860,8 +861,20 @@ function check_arr(code,arr){
 return arr.includes(code);
 }
 
-asc.oninput= function() {transliterate();};
-asc.onchange= function() {transliterate();};
+
+function mid_tl_check(){
+	try{
+			if(!doing_tl){
+				doing_tl=true;
+				transliterate();
+				doing_tl=false;
+			}
+		}catch(e){doing_tl=false;}
+}
+
+asc.oninput= function() {mid_tl_check();};
+asc.onchange= function() {mid_tl_check();};
+
 dct.onclick= function() {devowel();};
  
 function transliterate(){
