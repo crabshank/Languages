@@ -443,7 +443,12 @@ for(let i=0; i<len; i++){
 			sct.onpointerup=function(event){
 				let sc=event.currentTarget.children[0];
 				let selct=document.getSelection();
-				if(sc.length>0 && !event.path.includes(sc) && (!event.path.map((p)=>{return p.nodeName}).includes('RT') || (selct.type!=='Range' && !selct.isCollapsed) ) ){
+				let rtp=(event.path.map((p)=>{return p.nodeName}).includes('RT'))?true:false;
+				if(sc.length>0 &&(
+				(rtp==true && selct.type==="Caret" && selct.isCollapsed ) ||
+				rtp==false
+				)
+				){
 					if(event.currentTarget.getAttribute('ent')*1==0){
 						sc.style.display='flex';	
 						event.currentTarget.setAttribute('ent',1);
