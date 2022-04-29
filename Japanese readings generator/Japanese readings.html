@@ -68,9 +68,9 @@ position: absolute;
 	
 <body>
 </style>
-<h1>Japanese kanji readings generator / 漢字の読みの生成器</h1>
+<h1 style="user-select: none;">Japanese kanji readings generator / 漢字の読みの生成器</h1>
 <textarea id="og"></textarea>
-<button id="collapsr">Hide all menus / すべてのメニューを非表示</button>
+<button id="collapsr" style="user-select: none;">Hide all menus / すべてのメニューを非表示</button>
 <div id="rd"></div>
 <script src="kanjidic2.js"></script>
 <script>
@@ -442,7 +442,8 @@ for(let i=0; i<len; i++){
 			
 			sct.onpointerup=function(event){
 				let sc=event.currentTarget.children[0];
-				if(sc.length>0 && !event.path.includes(sc)){
+				let selct=document.getSelection();
+				if(sc.length>0 && !event.path.includes(sc) && (!event.path.map((p)=>{return p.nodeName}).includes('RT') || (selct.type!=='Range' && !selct.isCollapsed) ) ){
 					if(event.currentTarget.getAttribute('ent')*1==0){
 						sc.style.display='flex';	
 						event.currentTarget.setAttribute('ent',1);
