@@ -429,6 +429,17 @@ for(let i=0; i<len; i++){
 			
 
 			sct.setAttribute('ent',0);
+			
+			sct.onpointerenter=function(event){
+				let sc=event.currentTarget;
+				sc.style.cursor='pointer';	
+			}
+			
+			sct.onpointerleave=function(event){
+				let sc=event.currentTarget;
+				sc.style.cursor='initial';	
+			}
+			
 			sct.onpointerup=function(event){
 				let sc=event.currentTarget.children[0];
 				if(sc.length>0 && !event.path.includes(sc)){
