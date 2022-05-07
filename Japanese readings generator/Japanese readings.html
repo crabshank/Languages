@@ -240,10 +240,11 @@ for(let i=0, len=sl.length; i<len; i++){
 							k=lenK-1;
 						}
 					}
-					rdsPlusNext.push([rdsPlusEds[a][0],nt]);
+					rdsPlusNext.push([rdsPlusEds[a][0],nt,rdsPlusEds[a][1].length]);
 				}
 				
-				let rdsPlusScore=rdsPlusNext.map((r)=>{return [r[0],0]});
+				let rdsPlusScore=rdsPlusNext.map((r)=>{return [r[0],0,r[2]]});
+				let adj=false;
 				
 				for(let a=0, lenA=rdsPlusNext.length; a<lenA; a++){
 					let spSrch=[...rdsPlusEds[a][1]];
@@ -251,16 +252,23 @@ for(let i=0, len=sl.length; i<len; i++){
 					for(let b=0, lenB=spSrch.length; b<lenB; b++){
 						if(spSrch[b]==spAct[b]){
 							rdsPlusScore[a][1]++;
+							adj=true;
 						}else{
 							b=lenB-1;
 						}
 					}
 				}
 				
-				sortByArrCols(rdsPlusScore,[1,0],[1,-1]);
-				if(sel.selectedIndex!=rdsPlusScore[0][0]){
-					sel.selectedIndex=rdsPlusScore[0][0];
-					sel.dispatchEvent(new Event('input'));
+				if(adj){
+					for(let a=0, lenA=rdsPlusNext.length; a<lenA; a++){
+						rdsPlusScore[a][2]=rdsPlusScore[a][1]/rdsPlusScore[a][2];
+					}
+					
+					sortByArrCols(rdsPlusScore,[2,1,0],[1,1,-1]);
+					if(sel.selectedIndex!=rdsPlusScore[0][0]){
+						sel.selectedIndex=rdsPlusScore[0][0];
+						sel.dispatchEvent(new Event('input'));
+					}
 				}
 			}
 		}
