@@ -28,7 +28,8 @@
 }
 
 .sel{
-	color: yellow;
+	background: yellow;
+	color: black;
 }
 
 .searchRes{
@@ -60,7 +61,7 @@ input[type="checkbox"]{
 	<section style="width:100%" id="form">
 			<section style="min-width:50%;width:50%;display: flex;"><div id="searchBar" style="border: black 1px outset;width: -webkit-fill-available;-webkit-user-modify: read-write-plaintext-only;font-family: -webkit-pictograph;vertical-align: text-top;padding-bottom: 0.6ch;padding-left: 0.6ch;" contenteditable="true" title="Search"></div><button style="text-wrap: nowrap;" id="schb">Search</button></section>
 		<section style="display: flex;min-height: 93vh;" id="textRes">
-			<pre style="white-space: pre-wrap;width:75%;border: black 1px outset;margin: 0px;"  id="dict">Placeholder</pre>
+			<pre style="white-space: pre-wrap;width:75%;border: black 1px outset;margin: 0px;"  id="dict">Results printred here!</pre>
 			<section style="width:25%;border: black 1px outset;float: right;"  id="res">
 				<div class="multiselect">
 				<div class="selectBox" onclick="showCheckboxes()">
@@ -69,7 +70,7 @@ input[type="checkbox"]{
 				  </select>
 				  <div class="overSelect"></div>
 				</div>
-				<div class="checkboxes" class="" style="display: none;">
+				<div class="checkboxes" style="display: none;">
 				  <div>No results</div>
 				</div>
 			  </div>
@@ -79,6 +80,12 @@ input[type="checkbox"]{
 	
 <script>
 let lex_lc=lex.toLocaleLowerCase(); //	lowercase version, for case-insensitive search
+
+let regex_entries = /(?<=\n\s*\n\s*)[^\x00-\x7F\―\s]+\s*\n\s*\n/g;
+
+let entriesArr = [...lex_lc.matchAll(regex_entries)];
+let entriesIxs= entriesArr.map(m=>{return m.index;});
+
 const dict=document.getElementById("dict");
 const schb=document.getElementById("schb");
 const res=document.getElementById("res");
@@ -96,6 +103,28 @@ function getSubarray(arr, start, mark1, ed, mark2,joinIt) {
     
 }
 
+function findPrevEntry(p){
+	for(let i=entriesIxs.length; i>0; i--){
+		let ei=entriesIxs[i-1];
+		if(p>=ei){
+			return ei;
+		}else if(i===1){ //first el
+			return 0;
+		}
+	}
+}
+
+function findNextEntry(p){
+	for(let i=0, len=entriesIxs.length; i<len; i++){
+		let ei=entriesIxs[i];
+		if(p<=ei){
+			return ei;
+		}else if(i===len-1){
+			return lex_lc.length-1;
+		}
+	}
+}
+
 function genResult() {
 	let t=event.target;
 	if(lastSel!==null){
@@ -105,21 +134,23 @@ function genResult() {
 	lastSel=t;
 	let st=parseInt(t.getAttribute('st'));
 	let ed=parseInt(t.getAttribute('ed'));
-	let bf=200;
-	let af=200;
-	let ab=getSubarray(lex,Math.max(0,st-bf),st,Math.min(lex.length-1,ed+bf),ed);
+	let bf=findPrevEntry(st);
+	let af=findNextEntry(ed);
+	let ab=getSubarray(lex,bf,st,af,ed);
 	dict.innerHTML=ab;
-	document.body.scrollTop=0;
+	let mk=dict.getElementsByTagName('MARK');
+	try{ mk[0].scrollIntoView({block:'center'}); }catch(e){;}
+	//document.body.scrollTop=0;
 }
 
 function showRes(checkbox,sb) {
 	let ix=parseInt(checkbox.getAttribute('ix'));
 	let s_ix=searchRes[ix];
-	let s_ix3=s_ix[3];
+	let s_ix4=s_ix[4];
 	let dvs='';
-	for (let i = 0, len=s_ix3.length; i < len; i++){
-		let s_ix3i=s_ix3[i];
-		dvs+=`<div class="searchRes" st="${s_ix3i[0]}" ed="${s_ix3i[1]}" onclick="genResult()">${s_ix3i[0]}</div>`
+	for (let i = 0, len=s_ix4.length; i < len; i++){
+		let s_ix4i=s_ix4[i];
+		dvs+=`<div class="searchRes" st="${s_ix4i[0]}" ed="${s_ix4i[1]}" onclick="genResult()">${s_ix4i[0]}</div>`
 	}
 	sb.innerHTML=dvs;
 }
@@ -214,7 +245,8 @@ function searchWord(sFor,txt,delim){
 		
 		if(ti===delim || ti==='\n' || c>sfle || i===txle){
 			if(c>sfle){
-				out.push([acc[0],lc,sfLen,acc.slice(1).join('')]);
+				let st=acc[0];
+				out.push([st,lc,lc-st+1,sfLen]);
 			}
 			acc=[];
 			c=0;
@@ -223,35 +255,36 @@ function searchWord(sFor,txt,delim){
 	return out;
 }
 
-function doSearch(s,lex){
+function doSearch(s,lex,i){
 	let b=getCombinationsStr(s);
 
 	let res=[];
-	for (let i =b.length-1; i>=0; i--){
-		let bi=b[i];
+	//for (let i =b.length-1; i>=0; i--){
+		let bi=b[i-1];
 		for (let j = 0, len_j=bi.length; j < len_j; j++){
 			let bij=bi[j];
 			let sw=searchWord(bij,lex);
 			if(sw.length>0){
 				let bl=bij.length;
 				let sl=sw.length;
-				res.push([sl,bl,bij,sw]);
+				res.push([sl,bl,sw[2],bij,sw]);
 			}
 		}
-	}
-	sortByArrCols(res,[1,0],[1,-1]);
+	//}
+	sortByArrCols(res,[2,1,0],[-1,1,-1]);
 	return res;
 }
 
-function trgSearch(){
+function trgSearch(i){
+	
 	let srch=searchBar.innerText;
-	searchRes=doSearch(srch,lex_lc);
+	searchRes=doSearch(srch,lex_lc,i);
 	let newRes='';
 	for (let j = 0, len_j=searchRes.length; j < len_j; j++){
 		newRes+=`<div class="multiselect">
 				<div class="selectBox" onclick="showCheckboxes()">
 				  <select>
-					<option>Search results #${j+1}: ${searchRes[j][3].length} results (${searchRes[j][2]})</option>
+					<option>Search results #${j+1}: ${searchRes[j][4].length} results (${srch})</option>
 				  </select>
 				  <div class="overSelect" ix="${j}"></div>
 				</div>
@@ -259,11 +292,39 @@ function trgSearch(){
 				</div>
 			  </div>`;
 	}
-	res.innerHTML=newRes;
+	res.innerHTML+=newRes;
 	console.log(searchRes);
 }
+
+searchBar.oninput=function(){
+	let sbt=searchBar.innerText;
+	let sbl=sbt.length;
+	if(sbl>0){
+		schb.setAttribute('ln',sbl);
+		schb.setAttribute('tot',sbl);
+		schb.innerText=`Search ${sbl} characters`;
+	}else{
+		schb.innerText=`Search`;
+	}
+}
+
+
 schb.onclick=function(){
-	trgSearch();
+	let ln=schb.getAttribute('ln');
+	let lnp=parseInt(ln);
+	if(ln==schb.getAttribute('tot')){
+		res.innerHTML='';
+	}
+	if(lnp>0){
+		if(lnp>1){
+			let dc=lnp-1;
+			schb.setAttribute('ln',dc);
+			schb.innerText=`Search ${dc} characters`;
+		}
+		trgSearch(lnp);
+	}else{
+		schb.innerText='Search complete!';
+	}
 }
 
 </script>
