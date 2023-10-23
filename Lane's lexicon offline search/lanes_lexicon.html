@@ -212,7 +212,7 @@ function searchWord(sFor,txt,delim){
 			c+=1;
 		}
 		
-		if(ti===delim || c>sfle || i===txle){
+		if(ti===delim || ti==='\n' || c>sfle || i===txle){
 			if(c>sfle){
 				out.push([acc[0],lc,sfLen,acc.slice(1).join('')]);
 			}
