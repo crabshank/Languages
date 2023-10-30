@@ -290,6 +290,9 @@ function trgSearch(i){
 	let srch=searchBar.innerText;
 	let newRes='';
 	if(i>srch.length){
+dict.innerHTML='Results printed here!';
+srch=srch.toLocaleLowerCase();
+searchBar.innerText=srch;
 		searchRes=[];
 		combis=getCombinationsStr(srch);
 		for(let k=0, len_k=entriesArr.length; k<len_k; k++){
