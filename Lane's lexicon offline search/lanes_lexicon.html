@@ -155,7 +155,7 @@ function showRes(checkbox,sb) {
 	let dvs='';
 	for (let i = 0, len=s_ix4.length; i < len; i++){
 		let s_ix4i=s_ix4[i];
-		dvs+=`<div class="searchRes" st="${s_ix4i[0]}" ed="${s_ix4i[1]}" onclick="genResult()">${s_ix4i[0]}</div>`
+		dvs+=`<div class="searchRes" st="${s_ix4i[0]}" ed="${s_ix4i[1]}" onclick="genResult()">${s_ix4i[4]} (${s_ix4i[0]})</div>`
 	}
 	sb.innerHTML=dvs;
 }
@@ -251,7 +251,7 @@ function searchWord(sFor,txt,delim){
 		if(ti===delim || ti==='\n' || c>sfle || i===txle){
 			if(c>sfle){
 				let st=acc[0];
-				out.push([st,lc,lc-st+1,sfLen]);
+				out.push([st,lc,lc-st+1,sfLen,acc.slice(1).join('')]);
 			}
 			acc=[];
 			c=0;
