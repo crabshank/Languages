@@ -99,7 +99,7 @@ let combis=[];
 let lastSel=null;
 
 function getSubarray(arr, start, mark1, ed, mark2,joinIt) {
-	let a=arr.slice(start,mark1)+'<mark>'+arr.slice(mark1+1,mark2)+'</mark>'+arr.slice(mark2+1,ed);
+	let a=arr.slice(start,mark1)+'<mark>'+arr.slice(mark1,mark2+1)+'</mark>'+arr.slice(mark2+1,ed);
 	if(joinIt===true){
 		return a.join('');
 	}else{
