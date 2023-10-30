@@ -227,7 +227,7 @@ function sortByArrCols(arr, colsArr, dir){
 	}
 }
 
-function searchWord(sFor,txt,delim){
+function searchWord(sFor,txt,txt2,delim){
 	let out=[];
 	delim=(typeof(delim)!=='undefined')?delim:' ';
 	let txle=txt.length-1;
@@ -243,7 +243,7 @@ function searchWord(sFor,txt,delim){
 			if(acc.length===0){
 				acc.push(i);
 			}
-			acc.push(ti);
+			acc.push(txt2[i]);
 			lc=i;
 			c+=1;
 		}
@@ -274,7 +274,7 @@ function doSearch(s,lex,i){
 		let bi=combis[i-1];
 		for (let j = 0, len_j=bi.length; j < len_j; j++){
 			let bij=bi[j];
-			let sw=searchWord(bij,lex);
+			let sw=searchWord(bij,lex_lc,lex);
 			if(sw.length>0){
 				let bl=bij.length;
 				let sl=sw.length;
@@ -302,7 +302,7 @@ searchBar.innerText=srch;
 				let bn=combis[n-1];
 				for (let j = 0, len_j=bn.length; j < len_j; j++){
 					let bnj=bn[j];
-					let sw=searchWord(bnj,k0);
+					let sw=searchWord(bnj,k0,k0);
 					if(sw.length>0){
 						let elKix=elK.index;
 						let sw0=sw[0];
