@@ -290,6 +290,7 @@ function trgSearch(i){
 	let srch=searchBar.innerText;
 	let newRes='';
 	if(i>srch.length){
+		searchRes=[];
 		combis=getCombinationsStr(srch);
 		for(let k=0, len_k=entriesArr.length; k<len_k; k++){
 			let elK=entriesArr[k];
