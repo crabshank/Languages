@@ -260,7 +260,7 @@ function searchWord(sFor,txt,txt2,delim){
 	return out;
 }
 
-function doSearch(s,lex,i){
+function doSearch(s,lx,i){
 	let res=[];
 	let ist,ied;
 	if(i>=0){
@@ -274,7 +274,7 @@ function doSearch(s,lex,i){
 		let bi=combis[i-1];
 		for (let j = 0, len_j=bi.length; j < len_j; j++){
 			let bij=bi[j];
-			let sw=searchWord(bij,lex_lc,lex);
+			let sw=searchWord(bij,lx,lex);
 			if(sw.length>0){
 				let bl=bij.length;
 				let sl=sw.length;
