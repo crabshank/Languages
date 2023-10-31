@@ -260,7 +260,7 @@ function searchWord(sFor,txt,txt2,delim){
 	return out;
 }
 
-function doSearch(s,lx,i){
+function doSearch(s,lx,lxU,i){
 	let res=[];
 	let ist,ied;
 	if(i>=0){
@@ -274,7 +274,7 @@ function doSearch(s,lx,i){
 		let bi=combis[i-1];
 		for (let j = 0, len_j=bi.length; j < len_j; j++){
 			let bij=bi[j];
-			let sw=searchWord(bij,lx,lex);
+			let sw=searchWord(bij,lx,lxU);
 			if(sw.length>0){
 				let bl=bij.length;
 				let sl=sw.length;
@@ -348,7 +348,7 @@ searchBar.innerText=srch;
 		}
 		
 	}else{
-		searchRes=doSearch(srch,lex_lc,i);
+		searchRes=doSearch(srch,lex_lc,lex,i);
 		
 		for (let j = 0, len_j=searchRes.length; j < len_j; j++){
 			let nsr=searchRes[j][4].length;
