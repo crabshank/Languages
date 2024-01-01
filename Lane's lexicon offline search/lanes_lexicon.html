@@ -83,8 +83,6 @@ input[type="checkbox"]{
 	</section>
 	
 <script>
-let lex_lc=lex.toLocaleLowerCase(); //	lowercase version, for case-insensitive search
-
 let regex_entries = /(?<=\n\s*\n\s*)[^\x00-\x7F\―\s]+(?=\s*\n\s*\n)/g;
 
 let entriesArr = [...lex_lc.matchAll(regex_entries)];
