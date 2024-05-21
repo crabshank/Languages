@@ -30,6 +30,7 @@ transform: scaleX(0.4) scaleY(0.4) translateX(-75%) translateY(-75%);
 }
 ruby{
 text-align: center;
+display: initial;
 }
 div#rd section:hover{
  color: hsl(235deg 100% 50%);
@@ -451,7 +452,7 @@ for(let i=0; i<len; i++){
 			sct.onpointerup=function(event){
 				let sc=event.currentTarget.children[0];
 				let selct=document.getSelection();
-				let pmap=(event.path.map((p)=>{return p.nodeName}));
+				let pmap=(event.composedPath().map((p)=>{return p.nodeName}));
 				let rtp=pmap.includes('RT')?true:false;
 				let slp=pmap.includes('SELECT')?true:false;
 				if(sc.length>0 && slp==false &&(
