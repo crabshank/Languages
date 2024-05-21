@@ -220,7 +220,11 @@ for(let i=0, len=sl.length; i<len; i++){
 	if(!!sel && sel.getAttribute('mn_chg')=="false"){
 		let rds=[...sel.children].map((c,index)=>{return [index,c.textContent];});
 		let rdsPlus=rds.filter((c)=>{return c[1].split('(').length>2;});
-		let rdsPlusEds=rdsPlus.map((c)=>{return [c[0],c[1].split('(')[1].split(')')[0]];});
+		let rdsPlusEds=rdsPlus.map((c)=>{return [
+			c[0],
+			c[1].split('(')[1].split(')')[0]
+		];
+		});
 		if(rdsPlusEds.length>0){
 			let rdsPlusNext=[];
 			
@@ -407,7 +411,9 @@ for(let i=0; i<len; i++){
 					// Fill option with voice and language
 					let rd=r_order[r][1];
 					option.textContent = g[0]+' ('+rd+')';
-					option.setAttribute('kana',(g[0].startsWith('-')?g[0].slice(1).split('(')[0]:g[0].split('(')[0]));
+					option.setAttribute('kana',(
+						g[0].startsWith('-')	?	g[0].slice(1).split('(')[0]	:	( g[0].endsWith('-')? g[0].slice(0,-1).split('(')[0] : g[0].split('(')[0])	)
+					);
 					option.setAttribute('reading',rd);
 					option.style.color="black";
 					slc.appendChild(option);	
