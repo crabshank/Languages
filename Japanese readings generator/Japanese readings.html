@@ -466,24 +466,31 @@ for(let i=0; i<len; i++){
 			}
 			
 			sct.onpointerup=function(event){
-				let sc=event.currentTarget.children[0];
-				let selct=document.getSelection();
-				let pmap=(event.composedPath().map((p)=>{return p.nodeName}));
-				let rtp=pmap.includes('RT')?true:false;
-				let slp=pmap.includes('SELECT')?true:false;
-				if(sc.length>0 && slp==false &&(
-				(rtp==true && selct.type==="Caret" && selct.isCollapsed ) ||
-				rtp==false
-				)
-				){
-					if(event.currentTarget.getAttribute('ent')*1==0){
-						sc.style.display='flex';	
-						event.currentTarget.setAttribute('ent',1);
-					}else{
-						sc.style.display='none';
-						event.currentTarget.setAttribute('ent',0);
-					}
-				}
+				if(event.button===0){
+					let ect=event.currentTarget;
+					let ws=window.getSelection();
+					let wsc=ws.containsNode(ect, true);
+					if(ws.type!=="Range" || wsc===false){
+							let sc=ect.children[0];
+							let selct=document.getSelection();
+							let pmap=(event.composedPath().map((p)=>{return p.nodeName}));
+							let rtp=pmap.includes('RT')?true:false;
+							let slp=pmap.includes('SELECT')?true:false;
+							if(sc.length>0 && slp==false &&(
+							(rtp==true && selct.type==="Caret" && selct.isCollapsed ) ||
+							rtp==false
+							)
+							){
+								if(event.currentTarget.getAttribute('ent')*1==0){
+									sc.style.display='flex';	
+									event.currentTarget.setAttribute('ent',1);
+								}else{
+									sc.style.display='none';
+									event.currentTarget.setAttribute('ent',0);
+								}
+							}
+						}
+				}		
 			}		
 
 	}else{
