@@ -438,7 +438,7 @@ for(let i=0; i<len; i++){
 			slc.oninput= function(event){
 				let sc=event.target;
 				sc.setAttribute('mn_chg',true);
-				sc.nextSibling.children[0].innerText=sc[sc.selectedIndex].getAttribute('kana');
+				sc.nextSibling.children[1].innerText=sc[sc.selectedIndex].getAttribute('kana');
 				let d='\<'+sc[sc.selectedIndex].getAttribute('reading')+'\>';
 				sc.parentElement.title=d;
 				guessBest();
