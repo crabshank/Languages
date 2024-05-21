@@ -6,7 +6,7 @@
 div#rd{
 direction: ltr;
 position: absolute;
-margin-left: 41%;
+margin-left: 39.6%;
 text-align: left;
 font-size: 217%;
 min-width: 50%;
@@ -14,6 +14,7 @@ min-height: -webkit-fill-available;
 min-height: -moz-available;
 word-break: break-word;
 white-space: pre-line;
+padding-left: 0.5ch;
 }
 textarea{
 direction: ltr; 
@@ -30,17 +31,20 @@ transform: scaleX(0.4) scaleY(0.4) translateX(-75%) translateY(-75%);
 }
 ruby{
 text-align: center;
-display: initial;
+display: flex;
+flex-direction: column-reverse;
+font-family: SimSun !important;
 }
 div#rd section:hover{
  color: hsl(235deg 100% 50%);
 }
 ruby > rt{
+font-family: SimSun !important;
 font-size: 64%;
 display: grid;
 text-align: center;
 }
-ruby > rb{
+/*ruby > rb{
 font-family: SimSun !important;
 -webkit-touch-callout: none;
 -webkit-user-select: none;
@@ -48,7 +52,7 @@ font-family: SimSun !important;
 -moz-user-select: none;
 -ms-user-select: none;
 user-select: none;
-}
+}*/
 h1{
 text-align: center;
 }
@@ -392,12 +396,18 @@ for(let i=0; i<len; i++){
 		}
 		
 		var rby=document.createElement('ruby');
-		var rb=document.createElement('rb');
+		rby.innerText=(subRout==-1)?curr.char:out_char.inciter;
+		var rp1=document.createElement('rp');
 		var rt=document.createElement('rt');
+		var rp2=document.createElement('rp');
+		rby.appendChild(rp1);
 		rby.appendChild(rt);
-		rby.appendChild(rb);
+		rby.appendChild(rp2);
+		//rby.appendChild(rb);
 
-		rb.innerText=(subRout==-1)?curr.char:out_char.inciter;
+		//rb.innerText=(subRout==-1)?curr.char:out_char.inciter;
+		rp1.innerText='('
+		rp2.innerText=')'
 
 		if(out_char.rdgs.length>0){
 		var slc=document.createElement('SELECT');
